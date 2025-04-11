@@ -62,7 +62,7 @@ const Login = () => {
           </Link>
         </div>
 
-        <Card className="glass border-border/30">
+        <Card className="glass border-muted/30">
           <CardHeader>
             <CardTitle>შესვლა</CardTitle>
             <CardDescription>შეიყვანეთ თქვენი ავტორიზაციის მონაცემები</CardDescription>

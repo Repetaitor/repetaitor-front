@@ -14,35 +14,21 @@ export default {
     },
     extend: {
       colors: {
-        background: 'rgba(13, 17, 23, 1)',
-        foreground: 'rgba(243, 245, 248, 1)',
+        background: '#0d1117',
+        foreground: '#f8fafc',
 
-        header: 'rgba(3, 4, 5, 1)',
+        header: '#00030a',
+        card: '#161b23',
+        popover: '#0f1729',
 
-        primary: 'rgba(61, 135, 86, 1)',
-        'primary-foreground': 'rgba(243, 245, 248, 1)',
+        primary: '#368754',
+        secondary: '#212831',
+        danger: '#811d1d',
 
-        secondary: 'rgba(37, 39, 42, 1)',
-        'secondary-foreground': 'rgba(243, 245, 248, 1)',
+        muted: '#1f2a3d',
+        'muted-foreground': '#94a3b8',
 
-        muted: 'rgba(35, 39, 44, 1)',
-        'muted-foreground': 'rgba(140, 150, 160, 1)',
-
-        danger: 'rgba(135, 43, 37, 1)',
-        'danger-foreground': 'rgba(243, 245, 248, 1)',
-
-        card: 'rgba(23, 25, 28, 1)',
-        'card-foreground': 'rgba(243, 245, 248, 1)',
-
-        popover: 'rgba(21, 23, 27, 1)',
-        'popover-foreground': 'rgba(243, 245, 248, 1)',
-
-        accent: 'rgba(35, 39, 44, 1)',
-        'accent-foreground': 'rgba(243, 245, 248, 1)',
-
-        border: 'rgba(35, 39, 44, 1)',
-        input: 'rgba(35, 39, 44, 1)',
-        ring: 'rgba(212, 215, 230, 1)',
+        ring: '#cbd5e1',
       },
       borderRadius: {
         lg: '8px',
