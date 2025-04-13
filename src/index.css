@@ -39,3 +39,9 @@
         @apply text-2xl sm:text-3xl;
     }
 }
+
+@layer utilities {
+    .glass {
+        @apply rounded-lg border border-white/10 bg-white/5 backdrop-blur-lg;
+    }
+}

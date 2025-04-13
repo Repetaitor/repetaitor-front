@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useAuthContext } from '@/store/user-context';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'შეიყვანე ვალიდური ელფოსტა' }),
@@ -18,6 +19,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 const Login = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { login } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormValues>({
@@ -33,10 +36,12 @@ const Login = () => {
       setIsLoading(true);
 
       try {
+        await login(values.email, values.password);
         toast({
           title: 'წარმატებით შეხვედით',
           description: 'კეთილი იყოს თქვენი დაბრუნება!',
         });
+        navigate('/dashboard');
       } catch {
         toast({
           title: 'შესვლა ვერ მოხერხდა',
@@ -47,7 +52,7 @@ const Login = () => {
         setIsLoading(false);
       }
     },
-    [toast],
+    [login, navigate, toast],
   );
 
   return (
