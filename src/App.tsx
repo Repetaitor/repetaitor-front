@@ -6,21 +6,22 @@ import NotFound from '@/pages/NotFound';
 import Landing from '@/pages/Landing';
 import VerifyEmail from '@/pages/VerifyEmail';
 import Dashboard from '@/pages/Dashboard';
+import { NavigationRoute } from '@/types';
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path={NavigationRoute.LANDING} element={<Landing />} />
+        <Route path={NavigationRoute.LOGIN} element={<Login />} />
+        <Route path={NavigationRoute.REGISTER} element={<Register />} />
+        <Route path={NavigationRoute.VERIFY_EMAIL} element={<VerifyEmail />} />
+        <Route path={NavigationRoute.DASHBOARD} element={<Dashboard />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

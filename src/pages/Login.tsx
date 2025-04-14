@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/store';
+import { NavigationRoute } from '@/types';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'შეიყვანე ვალიდური ელფოსტა' }),
@@ -41,7 +42,7 @@ const Login = () => {
           title: 'წარმატებით შეხვედით',
           description: 'კეთილი იყოს თქვენი დაბრუნება!',
         });
-        navigate('/dashboard');
+        navigate(NavigationRoute.DASHBOARD);
       } catch {
         toast({
           title: 'შესვლა ვერ მოხერხდა',
@@ -60,7 +61,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Link
-            to="/"
+            to={NavigationRoute.LANDING}
             className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-3xl font-bold text-transparent"
           >
             RepetAItor
@@ -112,7 +113,7 @@ const Login = () => {
           <CardFooter className="flex flex-col space-y-2">
             <div className="w-full text-center text-sm">
               არ გაქვს ანგარიში?{' '}
-              <Link to="/register" className="text-primary hover:underline">
+              <Link to={NavigationRoute.REGISTER} className="text-primary hover:underline">
                 დარეგისტრირდი
               </Link>
             </div>

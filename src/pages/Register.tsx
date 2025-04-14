@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { UserRole } from '@/types';
+import { NavigationRoute, UserRole } from '@/types';
 import { registerUser } from '@/lib/serverCalls';
 
 const formSchema = z
@@ -58,7 +58,7 @@ const Register = () => {
           role: values.role,
         });
         console.log(guid);
-        navigate('/verify-email', { state: { email: values.email, guid } });
+        navigate(NavigationRoute.VERIFY_EMAIL, { state: { email: values.email, guid } });
         toast({
           title: 'თქვენ წარმატებით დარეგისტრირდით',
           description: 'კეთილი იყოს თქვენი მობრძანება.',
@@ -81,7 +81,7 @@ const Register = () => {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Link
-            to="/"
+            to={NavigationRoute.LANDING}
             className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-3xl font-bold text-transparent"
           >
             RepetAItor
@@ -205,7 +205,7 @@ const Register = () => {
           <CardFooter className="flex justify-center">
             <div className="text-sm">
               უკვე გაქვს ანგარიში?{' '}
-              <Link to="/login" className="text-primary hover:underline">
+              <Link to={NavigationRoute.LOGIN} className="text-primary hover:underline">
                 შესვლა
               </Link>
             </div>

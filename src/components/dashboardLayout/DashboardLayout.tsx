@@ -5,7 +5,8 @@ import MobileHeader from './MobileHeader';
 import MobileMenu from './MobileMenu';
 import Sidebar from './Sidebar';
 import { useAuthContext } from '@/store';
-import { useNavigationItems, useToast } from '@/hooks';
+import { useToast } from '@/hooks';
+import { NavigationRoute } from '@/types';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -24,25 +25,17 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
       title: 'სისტემიდან გასვლა',
       description: 'მომავალ შეხვედრამდე!',
     });
-    navigate('/');
+    navigate(NavigationRoute.LANDING);
   }, [logout, navigate, toast]);
-
-  const navItems = useNavigationItems();
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <MobileHeader setMobileMenuOpen={setMobileMenuOpen} />
 
-      <MobileMenu
-        navItems={navItems}
-        mobileMenuOpen={mobileMenuOpen}
-        setMobileMenuOpen={setMobileMenuOpen}
-        handleLogout={handleLogout}
-      />
+      <MobileMenu mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} handleLogout={handleLogout} />
 
       <div className="flex flex-1">
         <Sidebar
-          navItems={navItems}
           sidebarCollapsed={sidebarCollapsed}
           setSidebarCollapsed={setSidebarCollapsed}
           handleLogout={handleLogout}

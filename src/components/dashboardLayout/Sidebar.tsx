@@ -2,17 +2,18 @@ import { Link } from 'react-router-dom';
 import { LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { FC } from 'react';
-import { NavigationItem } from '@/types';
+import { useNavigationItems } from '@/hooks';
+import { NavigationRoute } from '@/types';
 
 interface SidebarProps {
-  navItems: NavigationItem[];
   sidebarCollapsed: boolean;
   setSidebarCollapsed: (collapsed: boolean) => void;
   handleLogout: () => void;
 }
 
-const Sidebar: FC<SidebarProps> = ({ navItems, sidebarCollapsed, setSidebarCollapsed, handleLogout }) => {
+const Sidebar = ({ sidebarCollapsed, setSidebarCollapsed, handleLogout }: SidebarProps) => {
+  const { navItems } = useNavigationItems();
+
   return (
     <aside
       className={cn(
@@ -22,7 +23,7 @@ const Sidebar: FC<SidebarProps> = ({ navItems, sidebarCollapsed, setSidebarColla
     >
       <div className="flex items-center justify-between border-b border-muted/30 p-4">
         {!sidebarCollapsed && (
-          <Link to="/" className="flex items-center gap-2">
+          <Link to={NavigationRoute.LANDING} className="flex items-center gap-2">
             <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-xl font-bold text-transparent">
               RepetAItor
             </span>

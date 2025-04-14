@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { verifyAuthCode } from '@/lib/serverCalls';
+import { NavigationRoute } from '@/types';
 
 const formSchema = z.object({
   code: z.string().length(6, { message: 'კოდი უნდა შეიცავდეს 6 სიმბოლოს' }),
@@ -29,7 +30,7 @@ const VerifyEmail = () => {
     const isValidString = (val: unknown) => typeof val === 'string' && val.trim() !== '';
 
     if (!isValidString(email) || !isValidString(guid)) {
-      navigate('/register');
+      navigate(NavigationRoute.REGISTER);
     }
   }, [email, guid, navigate]);
 
@@ -52,7 +53,7 @@ const VerifyEmail = () => {
             description: 'თქვენი ანგარიში გააქტიურებულია.',
           });
 
-          navigate('/login');
+          navigate(NavigationRoute.LOGIN);
         } else {
           throw new Error('Invalid verification code');
         }
@@ -74,7 +75,7 @@ const VerifyEmail = () => {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Link
-            to="/"
+            to={NavigationRoute.LANDING}
             className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-3xl font-bold text-transparent"
           >
             RepetAItor
@@ -119,7 +120,7 @@ const VerifyEmail = () => {
 
           <CardFooter className="flex flex-col space-y-2">
             <div className="w-full text-center text-sm">
-              <Link to="/login" className="text-primary hover:underline">
+              <Link to={NavigationRoute.LOGIN} className="text-primary hover:underline">
                 შესვლის გვერძე დაბრუნება
               </Link>
             </div>

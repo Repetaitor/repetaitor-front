@@ -2,17 +2,17 @@ import { Link } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { FC } from 'react';
-import { NavigationItem } from '@/types';
+import { useNavigationItems } from '@/hooks';
 
 interface MobileMenuProps {
-  navItems: NavigationItem[];
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
   handleLogout: () => void;
 }
 
-const MobileMenu: FC<MobileMenuProps> = ({ navItems, mobileMenuOpen, setMobileMenuOpen, handleLogout }) => {
+const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen, handleLogout }: MobileMenuProps) => {
+  const { navItems } = useNavigationItems();
+
   if (!mobileMenuOpen) return null;
 
   return (
