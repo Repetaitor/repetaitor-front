@@ -1,10 +1,11 @@
-import { useAuthContext } from '@/store/user-context';
+import { useAuthContext } from '@/store';
+import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
 
 const Dashboard = () => {
   const { activeUser } = useAuthContext();
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
+    <DashboardLayout>
       <h1 className="mb-4 text-4xl font-bold">Dashboard</h1>
       <p className="text-lg">Welcome to the Dashboard!</p>
       <div className="mt-4">
@@ -14,7 +15,7 @@ const Dashboard = () => {
         <p className="text-lg">Name: {activeUser?.firstName}</p>
         <p className="text-lg">lastName: {activeUser?.lastName}</p>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
