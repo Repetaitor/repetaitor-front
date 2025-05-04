@@ -13,14 +13,19 @@ export const createNewAssignment = async (groupId: number, essayId: number, dueD
   ).data;
 };
 
+interface AssignmentsResponse {
+  result: Assignment[];
+  totalCount: number;
+}
+
 export const getGroupAssignments = async (groupId: number) => {
   return (
-    await api.get<Assignment[]>(`${SERVER_URL}/${ServerRoutes.GET_GROUP_ASSIGNMENTS}`, {
+    await api.get<AssignmentsResponse>(`${SERVER_URL}/${ServerRoutes.GET_GROUP_ASSIGNMENTS}`, {
       params: {
         groupId,
         offset: 0,
         limit: 100,
       },
     })
-  ).data;
+  ).data.result;
 };
