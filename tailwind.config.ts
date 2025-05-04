@@ -53,8 +53,14 @@ export default {
           '100%': { transform: 'translateX(0)', opacity: '1' },
         },
         pulse: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.5' },
+          '0%, 100%': { opacity: '0.6', transform: 'scale(0.9)' },
+          '50%': { opacity: '1', transform: 'scale(1.1)' },
+        },
+        'spin-reverse': {
+          to: { transform: 'rotate(-360deg)' },
+        },
+        ping: {
+          '75%, 100%': { transform: 'scale(1.2)', opacity: '0' },
         },
       },
       animation: {
@@ -63,6 +69,10 @@ export default {
         'slide-in-left': 'slideInLeft 0.5s ease-out forwards',
         'slide-in-right': 'slideInRight 0.5s ease-out forwards',
         'pulse-slow': 'pulse 3s infinite',
+        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'spin-slow': 'spin 3s linear infinite',
+        'spin-reverse': 'spin-reverse 2s linear infinite',
+        ping: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

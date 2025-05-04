@@ -7,12 +7,14 @@ import Sidebar from './Sidebar';
 import { useAuthContext } from '@/store';
 import { useToast } from '@/hooks';
 import { NavigationRoute } from '@/types';
+import LoadingAnimation from '@/components/ui/loading-animation.tsx';
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  isPageLoading?: boolean;
 }
 
-const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
+const DashboardLayout: FC<DashboardLayoutProps> = ({ children, isPageLoading }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { logout } = useAuthContext();
@@ -50,7 +52,13 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
         />
 
         <main className={cn('flex-1 transition-all duration-300 md:ml-64', sidebarCollapsed && 'md:ml-16')}>
-          <div className="p-6">{children}</div>
+          {isPageLoading ? (
+            <div className="flex h-full w-full items-center justify-center p-6">
+              <LoadingAnimation />
+            </div>
+          ) : (
+            <div className="p-6">{children}</div>
+          )}
         </main>
       </div>
     </div>
