@@ -26,6 +26,7 @@ export const GroupsProvider = ({ children }: { children: ReactNode }) => {
       setGroups(fetchedGroups);
     } catch (error) {
       console.error('Error fetching groups:', error);
+      setGroups([]);
     } finally {
       setGroupsLoading(false);
     }

@@ -18,4 +18,10 @@ export enum ServerRoutes {
   // Assignment
   CREATE_NEW_ASSIGNMENT = 'Assignment/CreateNewAssignment',
   GET_GROUP_ASSIGNMENTS = 'Assignment/GetGroupAssignments',
+
+  // Essay
+  ADD_NEW_ESSAY = 'Essay/AddNewEssay',
+  GET_USER_ESSAY = 'Essay/GetUserEssay',
+  UPDATE_ESSAY = 'Essay/UpdateEssay',
+  DELETE_ESSAY = 'Essay/DeleteEssay',
 }

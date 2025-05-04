@@ -9,6 +9,7 @@ import Dashboard from '@/pages/Dashboard';
 import { NavigationRoute } from '@/types';
 import Groups from '@/pages/Groups.tsx';
 import GroupDetail from '@/pages/GroupDetail.tsx';
+import Essays from '@/pages/Essays.tsx';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path={NavigationRoute.DASHBOARD} element={<Dashboard />} />
         <Route path={NavigationRoute.GROUPS} element={<Groups />} />
         <Route path={`${NavigationRoute.GROUPS}/:id`} element={<GroupDetail />} />
+        <Route path={NavigationRoute.ESSAYS} element={<Essays />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
