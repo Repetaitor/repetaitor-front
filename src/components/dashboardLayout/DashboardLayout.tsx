@@ -15,11 +15,12 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: FC<DashboardLayoutProps> = ({ children, isPageLoading }) => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { logout } = useAuthContext();
+  const { logout, isLoginLoading } = useAuthContext();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = useCallback(async () => {
     try {
@@ -37,6 +38,14 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children, isPageLoading }) 
       });
     }
   }, [logout, navigate, toast]);
+
+  if (isLoginLoading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <LoadingAnimation />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
