@@ -19,13 +19,21 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleLogout = useCallback(() => {
-    logout();
-    toast({
-      title: 'სისტემიდან გასვლა',
-      description: 'მომავალ შეხვედრამდე!',
-    });
-    navigate(NavigationRoute.LANDING);
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+      toast({
+        title: 'სისტემიდან გასვლა',
+        description: 'მომავალ შეხვედრამდე!',
+      });
+      navigate(NavigationRoute.LANDING);
+    } catch {
+      toast({
+        title: 'შეცდომა',
+        description: 'გთხოვთ, სცადოთ თავიდან.',
+        variant: 'danger',
+      });
+    }
   }, [logout, navigate, toast]);
 
   return (

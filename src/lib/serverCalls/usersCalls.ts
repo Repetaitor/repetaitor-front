@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { SERVER_URL, ServerRoutes } from '@/constants';
 import { User, UserRole } from '@/types';
+import api from './API';
 
 interface RegisterUserResponse {
   guid: string;
@@ -13,7 +13,7 @@ export const registerUser = async (userData: {
   password: string;
   role: UserRole;
 }) => {
-  return (await axios.post<RegisterUserResponse>(`${SERVER_URL}/${ServerRoutes.SIGN_UP}`, userData)).data;
+  return (await api.post<RegisterUserResponse>(`${SERVER_URL}/${ServerRoutes.SIGN_UP}`, userData)).data;
 };
 
 interface VerifyAuthCodeResponse {
@@ -22,7 +22,7 @@ interface VerifyAuthCodeResponse {
 
 export const verifyAuthCode = async (guid: string, email: string, code: string) => {
   return (
-    await axios.post<VerifyAuthCodeResponse>(`${SERVER_URL}/${ServerRoutes.VERIFY_AUTH_CODE}`, {
+    await api.post<VerifyAuthCodeResponse>(`${SERVER_URL}/${ServerRoutes.VERIFY_AUTH_CODE}`, {
       guid,
       email,
       code,
@@ -30,11 +30,14 @@ export const verifyAuthCode = async (guid: string, email: string, code: string) 
   ).data;
 };
 
-interface SignInResponse {
-  user: User;
-  jwtToken: string;
-}
-
 export const signIn = async (email: string, password: string) => {
-  return (await axios.post<SignInResponse>(`${SERVER_URL}/${ServerRoutes.SIGN_IN}`, { email, password })).data;
+  return (await api.post<User>(`${SERVER_URL}/${ServerRoutes.SIGN_IN}`, { email, password })).data;
+};
+
+export const meAuth = async () => {
+  return (await api.get<User>(`${SERVER_URL}/${ServerRoutes.ME}`)).data;
+};
+
+export const signOut = async () => {
+  return (await api.post(`${SERVER_URL}/${ServerRoutes.SIGN_OUT}`)).data;
 };

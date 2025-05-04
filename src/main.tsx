@@ -1,15 +1,14 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
 import Toaster from './components/toast/toaster.tsx';
-import { AuthContextProvider } from '@/store';
+import { AuthContextProvider, GroupsProvider } from '@/store';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AuthContextProvider>
+  <AuthContextProvider>
+    <GroupsProvider>
       <Toaster />
       <App />
-    </AuthContextProvider>
-  </StrictMode>,
+    </GroupsProvider>
+  </AuthContextProvider>,
 );

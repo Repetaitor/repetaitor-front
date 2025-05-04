@@ -7,6 +7,8 @@ import Landing from '@/pages/Landing';
 import VerifyEmail from '@/pages/VerifyEmail';
 import Dashboard from '@/pages/Dashboard';
 import { NavigationRoute } from '@/types';
+import Groups from '@/pages/Groups.tsx';
+import GroupDetail from '@/pages/GroupDetail.tsx';
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
         <Route path={NavigationRoute.REGISTER} element={<Register />} />
         <Route path={NavigationRoute.VERIFY_EMAIL} element={<VerifyEmail />} />
         <Route path={NavigationRoute.DASHBOARD} element={<Dashboard />} />
+        <Route path={NavigationRoute.GROUPS} element={<Groups />} />
+        <Route path={`${NavigationRoute.GROUPS}/:id`} element={<GroupDetail />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
