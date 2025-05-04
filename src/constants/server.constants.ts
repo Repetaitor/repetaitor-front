@@ -14,6 +14,8 @@ export enum ServerRoutes {
   GET_GROUP_USERS = 'Group/GetGroupUsers',
   DELETE_GROUP = 'Group/DeleteGroup',
   REMOVE_STUDENT_FROM_GROUP = 'Group/RemoveStudentFromGroup',
+  GET_STUDENT_GROUPS = 'Group/GetStudentGroups',
+  ADD_STUDENT_TO_GROUP = 'Group/AddStudentToGroup',
 
   // Assignment
   CREATE_NEW_ASSIGNMENT = 'Assignment/CreateNewAssignment',

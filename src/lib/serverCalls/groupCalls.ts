@@ -16,7 +16,7 @@ export const createGroup = async (groupName: string) => {
 
 export const getGroupStudents = async (groupId: number) => {
   return (
-    await api.get<User[]>(`${SERVER_URL}/${ServerRoutes.GET_GROUP_USERS}/${groupId}`, {
+    await api.get<User[]>(`${SERVER_URL}/${ServerRoutes.GET_GROUP_USERS}`, {
       params: {
         groupId,
       },
@@ -41,6 +41,18 @@ export const removeStudentFromGroup = async (groupId: number, studentId: number)
         groupId,
         userId: studentId,
       },
+    })
+  ).data;
+};
+
+export const getStudentGroup = async () => {
+  return (await api.get<Group>(`${SERVER_URL}/${ServerRoutes.GET_STUDENT_GROUPS}`)).data;
+};
+
+export const addStudentToGroup = async (groupCode: string) => {
+  return (
+    await api.post(`${SERVER_URL}/${ServerRoutes.ADD_STUDENT_TO_GROUP}`, {
+      groupCode,
     })
   ).data;
 };

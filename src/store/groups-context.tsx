@@ -1,14 +1,16 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { Group } from '@/types';
-import { createGroup, deleteGroup, getTeacherGroups } from '@/lib/serverCalls';
+import { Group, UserRole } from '@/types';
+import { addStudentToGroup, createGroup, deleteGroup, getStudentGroup, getTeacherGroups } from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
 
 interface GroupsContextType {
   groups: Group[];
+  studentGroup: Group | null;
   groupsLoading: boolean;
   createNewGroup: (groupName: string) => Promise<void>;
-  refetchGroups: () => Promise<void>;
+  refetchTeacherGroups: () => Promise<void>;
   removeGroup: (groupId: number) => Promise<void>;
+  joinGroup: (groupCode: string) => Promise<Group>;
 }
 
 const GroupsContext = createContext<GroupsContextType | undefined>(undefined);
@@ -17,9 +19,11 @@ export const GroupsProvider = ({ children }: { children: ReactNode }) => {
   const { activeUser } = useAuthContext();
 
   const [groups, setGroups] = useState<Group[]>([]);
+  const [studentGroup, setStudentGroup] = useState<Group | null>(null);
   const [groupsLoading, setGroupsLoading] = useState(true);
 
-  const fetchGroups = useCallback(async () => {
+  const fetchTeacherGroups = useCallback(async () => {
+    if (!activeUser || activeUser.role !== UserRole.TEACHER) return;
     setGroupsLoading(true);
     try {
       const fetchedGroups = await getTeacherGroups();
@@ -30,11 +34,11 @@ export const GroupsProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setGroupsLoading(false);
     }
-  }, []);
+  }, [activeUser]);
 
   useEffect(() => {
-    fetchGroups();
-  }, [fetchGroups, activeUser]);
+    fetchTeacherGroups();
+  }, [fetchTeacherGroups]);
 
   const createNewGroup = useCallback(async (groupName: string) => {
     const newGroup = await createGroup(groupName);
@@ -46,14 +50,46 @@ export const GroupsProvider = ({ children }: { children: ReactNode }) => {
     setGroups((prev) => prev.filter((group) => group.id !== groupId));
   }, []);
 
+  const fetchStudentGroup = useCallback(async () => {
+    if (!activeUser || activeUser.role !== UserRole.STUDENT) return;
+    setGroupsLoading(true);
+    try {
+      const fetchedGroups = await getStudentGroup();
+      setStudentGroup(fetchedGroups);
+    } catch (error) {
+      console.error('Error fetching groups:', error);
+      setStudentGroup(null);
+    } finally {
+      setGroupsLoading(false);
+    }
+  }, [activeUser]);
+
+  useEffect(() => {
+    fetchStudentGroup();
+  }, [fetchStudentGroup]);
+
+  const joinGroup = useCallback(
+    async (groupCode: string) => {
+      if (!activeUser || activeUser.role !== UserRole.STUDENT) throw new Error('User is not a student');
+
+      await addStudentToGroup(groupCode);
+      const fetchedGroups = await getStudentGroup();
+      setStudentGroup(fetchedGroups);
+      return fetchedGroups;
+    },
+    [activeUser],
+  );
+
   return (
     <GroupsContext.Provider
       value={{
         groups,
+        studentGroup,
         groupsLoading,
         createNewGroup,
-        refetchGroups: fetchGroups,
+        refetchTeacherGroups: fetchTeacherGroups,
         removeGroup,
+        joinGroup,
       }}
     >
       {children}
