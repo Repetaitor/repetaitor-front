@@ -1,6 +1,6 @@
 import api from './API';
 import { SERVER_URL, ServerRoutes } from '@/constants';
-import { Assignment, StudentAssignment } from '@/types';
+import { Assignment, AssignmentEvaluation, StudentAssignment } from '@/types';
 
 export const createNewAssignment = async (groupId: number, essayId: number, dueDate: Date, instructions?: string) => {
   return (
@@ -45,4 +45,41 @@ export const getStudentAssignments = async (studentId: number) => {
       },
     })
   ).data.result;
+};
+
+export const getAssignmentBaseInfoById = async (assignmentId: number) => {
+  return (
+    await api.get<Assignment>(`${SERVER_URL}/${ServerRoutes.GET_ASSIGNMENT_BASE_INFO_BY_ID}`, {
+      params: {
+        assignmentId,
+      },
+    })
+  ).data;
+};
+
+export const saveOrSubmitAssignment = async (
+  assignmentId: number,
+  text: string,
+  wordCount: number,
+  isSubmitted: boolean,
+) => {
+  return (
+    await api.post<void>(`${SERVER_URL}/${ServerRoutes.SAVE_OR_SUBMIT_ASSIGNMENT}`, {
+      assignmentId,
+      text,
+      wordCount,
+      isSubmitted,
+    })
+  ).data;
+};
+
+export const getUserAssignment = async (userId: number, assignmentId: number) => {
+  return (
+    await api.get<AssignmentEvaluation>(`${SERVER_URL}/${ServerRoutes.GET_USER_ASSIGNMENT}`, {
+      params: {
+        userId,
+        assignmentId,
+      },
+    })
+  ).data;
 };

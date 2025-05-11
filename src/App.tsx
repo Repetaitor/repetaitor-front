@@ -11,6 +11,7 @@ import Groups from '@/pages/Groups.tsx';
 import GroupDetail from '@/pages/GroupDetail.tsx';
 import Essays from '@/pages/Essays.tsx';
 import Assignments from '@/pages/Assignments.tsx';
+import Editor from '@/pages/Editor.tsx';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path={`${NavigationRoute.GROUPS}/:id`} element={<GroupDetail />} />
         <Route path={NavigationRoute.ESSAYS} element={<Essays />} />
         <Route path={NavigationRoute.ASSIGNMENTS} element={<Assignments />} />
+        <Route path={`${NavigationRoute.EDITOR}/:id`} element={<Editor />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

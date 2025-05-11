@@ -16,4 +16,6 @@ export enum NavigationRoute {
   GROUPS = '/groups',
   ESSAYS = '/essays',
   SUBMISSIONS = '/submissions',
+  EDITOR = '/editor',
+  FEEDBACK = '/feedback',
 }

@@ -5,7 +5,7 @@ import { AlertTriangle, BookOpen, Calendar, CheckCircle2, Clock, FileText } from
 import { getFullName } from '@/lib/users.ts';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button.tsx';
-import { AssignmentStatus, StudentAssignment } from '@/types';
+import { AssignmentStatus, NavigationRoute, StudentAssignment } from '@/types';
 
 interface AssignmentOverviewProps {
   assignment: StudentAssignment;
@@ -87,17 +87,11 @@ const AssignmentOverview = ({ assignment }: AssignmentOverviewProps) => {
 
           <div className="flex flex-row items-center justify-between gap-2 md:flex-col md:items-end md:justify-center">
             {assignment.status.name === AssignmentStatus.Complete ? (
-              <Link to={`/feedback/${assignment.assignment.id}`}>
+              <Link to={`${NavigationRoute.FEEDBACK}/${assignment.assignment.id}`}>
                 <Button>შეფასება</Button>
               </Link>
             ) : (
-              <Link
-                to={
-                  assignment.status.name === AssignmentStatus.InProgress
-                    ? `/essay/${assignment.assignment.id}`
-                    : `/essay/${assignment.assignment.id}`
-                }
-              >
+              <Link to={`${NavigationRoute.EDITOR}/${assignment.assignment.id}`}>
                 <Button>{assignment.status.name === AssignmentStatus.InProgress ? 'გაგრძელება' : 'დაწყება'}</Button>
               </Link>
             )}

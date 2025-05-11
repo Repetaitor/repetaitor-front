@@ -31,3 +31,18 @@ export type StudentAssignment = {
   totalScore: number;
   actualWordCount: number;
 };
+
+export type AssignmentEvaluation = {
+  assignmentId: number;
+  assignDate: Date;
+  userId: number;
+  status: AssignmentStatusType;
+  text: string;
+  wordCount: number;
+  isEvaluated: boolean;
+  grammarScore: number;
+  fluencyScore: number;
+  generalComments: string[];
+  evaluationComments: string[];
+  feedbackSeen: boolean;
+};
