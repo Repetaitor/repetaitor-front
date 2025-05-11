@@ -2,7 +2,7 @@ import { Assignment } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 import { createNewAssignment, getGroupAssignments } from '@/lib/serverCalls/assignmentCalls.ts';
 
-export const useAssignments = (groupId?: number) => {
+export const useGroupAssignments = (groupId?: number) => {
   const [groupAssignments, setGroupAssignments] = useState<Assignment[]>([]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import api from './API';
 import { SERVER_URL, ServerRoutes } from '@/constants';
-import { Assignment } from '@/types';
+import { Assignment, StudentAssignment } from '@/types';
 
 export const createNewAssignment = async (groupId: number, essayId: number, dueDate: Date, instructions?: string) => {
   return (
@@ -23,6 +23,23 @@ export const getGroupAssignments = async (groupId: number) => {
     await api.get<AssignmentsResponse>(`${SERVER_URL}/${ServerRoutes.GET_GROUP_ASSIGNMENTS}`, {
       params: {
         groupId,
+        offset: 0,
+        limit: 100,
+      },
+    })
+  ).data.result;
+};
+
+interface StudentAssignmentsResponse {
+  result: StudentAssignment[];
+  totalCount: number;
+}
+
+export const getStudentAssignments = async (studentId: number) => {
+  return (
+    await api.get<StudentAssignmentsResponse>(`${SERVER_URL}/${ServerRoutes.GET_USER_ASSIGNMENTS}`, {
+      params: {
+        userId: studentId,
         offset: 0,
         limit: 100,
       },

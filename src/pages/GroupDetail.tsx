@@ -11,7 +11,7 @@ import GroupDetailStatistic from '@/components/groups/GroupDetailStatistic.tsx';
 import GroupDetailAssignments from '@/components/groups/GroupDetailAssignments';
 import GroupDetailStudents from '@/components/groups/GroupDetailStudents.tsx';
 import AddAssignmentButton from '@/components/groups/AddAssignmentButton.tsx';
-import { useAssignments } from '@/hooks/useAssignments.ts';
+import { useGroupAssignments } from '@/hooks/useGroupAssignments.ts';
 import { getGroupStudents } from '@/lib/serverCalls';
 
 const GroupDetail = () => {
@@ -25,7 +25,7 @@ const GroupDetail = () => {
 
   const group = useMemo(() => groups.find((g) => g.id === Number(id)), [groups, id]);
 
-  const { groupAssignments, addAssignment, removeAssignment } = useAssignments(group?.id);
+  const { groupAssignments, addAssignment, removeAssignment } = useGroupAssignments(group?.id);
 
   useEffect(() => {
     if (group) {
