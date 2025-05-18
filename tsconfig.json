@@ -4,6 +4,7 @@
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
+  "include": ["vite.config.ts", "src"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
