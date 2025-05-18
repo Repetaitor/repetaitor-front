@@ -31,7 +31,5 @@ export const useGroupAssignments = (groupId?: number) => {
     [groupId],
   );
 
-  const removeAssignment = useCallback((assignmentId: number) => {}, []);
-
-  return { groupAssignments, addAssignment, removeAssignment };
+  return { groupAssignments, addAssignment };
 };

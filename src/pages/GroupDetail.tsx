@@ -25,7 +25,7 @@ const GroupDetail = () => {
 
   const group = useMemo(() => groups.find((g) => g.id === Number(id)), [groups, id]);
 
-  const { groupAssignments, addAssignment, removeAssignment } = useGroupAssignments(group?.id);
+  const { groupAssignments, addAssignment } = useGroupAssignments(group?.id);
 
   useEffect(() => {
     if (group) {
@@ -69,7 +69,7 @@ const GroupDetail = () => {
           </div>
           <GroupDetailAssignments
             groupAssignments={groupAssignments}
-            removeAssignment={removeAssignment}
+            removeAssignment={() => {}}
             addAssignment={addAssignment}
           />
         </div>
