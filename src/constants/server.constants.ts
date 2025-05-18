@@ -25,6 +25,7 @@ export enum ServerRoutes {
   GET_ASSIGNMENT_BASE_INFO_BY_ID = 'Assignment/GetAssignmentBaseInfoById',
   SAVE_OR_SUBMIT_ASSIGNMENT = 'Assignment/SaveOrSubmitAssignment',
   GET_NEED_EVALUATION_ASSIGNMENTS = 'Assignment/GetNeedEvaluationAssignments',
+  EVALUATE_ASSIGNMENT = 'Assignment/EvaluateAssignment',
 
   // Essay
   ADD_NEW_ESSAY = 'Essay/AddNewEssay',

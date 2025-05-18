@@ -30,7 +30,7 @@ const App = () => {
         <Route path={NavigationRoute.ASSIGNMENTS} element={<Assignments />} />
         <Route path={`${NavigationRoute.EDITOR}/:id`} element={<Editor />} />
         <Route path={NavigationRoute.SUBMISSIONS} element={<Submissions />} />
-        <Route path={`${NavigationRoute.EVALUATE}/:id`} element={<Evaluate />} />
+        <Route path={`${NavigationRoute.EVALUATE}/:userId/:assignmentId`} element={<Evaluate />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

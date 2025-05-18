@@ -11,7 +11,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/paginaion';
 import { useNavigate } from 'react-router-dom';
-import { StudentAssignment } from '@/types';
+import { NavigationRoute, StudentAssignment } from '@/types';
 import { getFullName } from '@/lib/users.ts';
 
 interface SubmissionsListProps {
@@ -31,8 +31,8 @@ const SubmissionsList = ({ submissions }: SubmissionsListProps) => {
   );
 
   const handleEvaluate = useCallback(
-    (submissionId: number) => {
-      navigate(`/evaluation/${submissionId}`);
+    (userId: number, assignmentId: number) => {
+      navigate(`${NavigationRoute.EVALUATE}/${userId}/${assignmentId}`);
     },
     [navigate],
   );
@@ -63,12 +63,12 @@ const SubmissionsList = ({ submissions }: SubmissionsListProps) => {
         </TableHeader>
         <TableBody>
           {currentSubmissions.map((submission) => (
-            <TableRow key={`${submission.student.email}- ${submission.assignment.id}`}>
+            <TableRow key={`${submission.student.id}- ${submission.assignment.id}`}>
               <TableCell className="font-medium">{submission.assignment.essay.essayTitle}</TableCell>
               <TableCell>{getFullName(submission.student)}</TableCell>
               <TableCell>{submission.actualWordCount}</TableCell>
               <TableCell className="text-right">
-                <Button size="sm" onClick={() => handleEvaluate(submission.assignment.id)}>
+                <Button size="sm" onClick={() => handleEvaluate(submission.student.id, submission.assignment.id)}>
                   გასწორება
                   <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>

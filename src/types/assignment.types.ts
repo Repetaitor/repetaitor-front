@@ -46,3 +46,19 @@ export type AssignmentEvaluation = {
   evaluationComments: string[];
   feedbackSeen: boolean;
 };
+
+export enum EvaluationCommentStatus {
+  Strength = 1,
+  Suggestion = 2,
+  Improvement = 3,
+}
+
+export type EvaluationComment = {
+  statusId: EvaluationCommentStatus;
+  comment: string;
+};
+
+export type EvaluationTextComment = EvaluationComment & {
+  startIndex: number;
+  endIndex: number;
+};

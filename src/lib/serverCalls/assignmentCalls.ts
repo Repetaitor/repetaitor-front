@@ -1,6 +1,6 @@
 import api from './API';
 import { SERVER_URL, ServerRoutes } from '@/constants';
-import { Assignment, AssignmentEvaluation, StudentAssignment } from '@/types';
+import { Assignment, AssignmentEvaluation, EvaluationComment, EvaluationTextComment, StudentAssignment } from '@/types';
 
 export const createNewAssignment = async (groupId: number, essayId: number, dueDate: Date, instructions?: string) => {
   return (
@@ -93,4 +93,22 @@ export const getNeedEvaluationAssignments = async () => {
       },
     })
   ).data.result;
+};
+
+export const evaluateAssignment = async (
+  userId: number,
+  assignmentId: number,
+  fluencyScore: number,
+  grammarScore: number,
+  evaluationTextComments: EvaluationTextComment[],
+  generalComments: EvaluationComment[],
+) => {
+  return await api.put<void>(`${SERVER_URL}/${ServerRoutes.EVALUATE_ASSIGNMENT}`, {
+    userId,
+    assignmentId,
+    fluencyScore,
+    grammarScore,
+    evaluationTextComments,
+    generalComments,
+  });
 };
