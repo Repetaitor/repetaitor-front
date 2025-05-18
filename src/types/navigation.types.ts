@@ -18,4 +18,5 @@ export enum NavigationRoute {
   SUBMISSIONS = '/submissions',
   EDITOR = '/editor',
   FEEDBACK = '/feedback',
+  EVALUATE = '/evaluate',
 }

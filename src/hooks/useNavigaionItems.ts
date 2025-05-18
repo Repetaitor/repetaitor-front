@@ -35,7 +35,7 @@ const TEACHER_NAV_ITEMS: NavigationItem[] = [
   },
   {
     icon: ClipboardCheck,
-    label: 'შესრულებული დავალებები',
+    label: 'ნაშრომები',
     href: NavigationRoute.SUBMISSIONS,
   },
 ];

@@ -83,3 +83,14 @@ export const getUserAssignment = async (userId: number, assignmentId: number) =>
     })
   ).data;
 };
+
+export const getNeedEvaluationAssignments = async () => {
+  return (
+    await api.get<StudentAssignmentsResponse>(`${SERVER_URL}/${ServerRoutes.GET_NEED_EVALUATION_ASSIGNMENTS}`, {
+      params: {
+        offset: 0,
+        limit: 100,
+      },
+    })
+  ).data.result;
+};
