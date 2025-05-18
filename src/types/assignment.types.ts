@@ -42,8 +42,8 @@ export type AssignmentEvaluation = {
   isEvaluated: boolean;
   grammarScore: number;
   fluencyScore: number;
-  generalComments: string[];
-  evaluationComments: string[];
+  generalComments: EvaluationComment[];
+  evaluationComments: EvaluationTextComment[];
   feedbackSeen: boolean;
 };
 

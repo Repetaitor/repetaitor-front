@@ -348,7 +348,7 @@ const Evaluation = () => {
 
                 <div>
                   <div className="mb-2 flex items-center justify-between">
-                    <h3 className="text-sm font-medium">სათქმელი (0-8)</h3>
+                    <h3 className="text-sm font-medium">ანალიზი (0-8)</h3>
                     <span className="font-medium">{fluencyScore}</span>
                   </div>
                   <Slider

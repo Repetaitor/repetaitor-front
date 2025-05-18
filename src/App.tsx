@@ -14,6 +14,7 @@ import Assignments from '@/pages/Assignments.tsx';
 import Editor from '@/pages/Editor.tsx';
 import Submissions from '@/pages/Submissions.tsx';
 import Evaluate from '@/pages/Evaluate.tsx';
+import Feedback from '@/pages/Feedback.tsx';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         <Route path={`${NavigationRoute.EDITOR}/:id`} element={<Editor />} />
         <Route path={NavigationRoute.SUBMISSIONS} element={<Submissions />} />
         <Route path={`${NavigationRoute.EVALUATE}/:userId/:assignmentId`} element={<Evaluate />} />
+        <Route path={`${NavigationRoute.FEEDBACK}/:assignmentId`} element={<Feedback />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
