@@ -3,6 +3,7 @@ import { useGroupsContext } from '@/store';
 import StudentGroupInformation from '@/components/mainDashboard/StudentGroupInformation.tsx';
 import { useStudentAssignments } from '@/hooks';
 import StudentStatistic from '@/components/mainDashboard/StudentStatistic.tsx';
+import StudentPerformanceChart from '@/components/mainDashboard/StudentPerformanceChart.tsx';
 
 const StudentDashboard = () => {
   const { groupsLoading } = useGroupsContext();
@@ -14,6 +15,8 @@ const StudentDashboard = () => {
         <StudentGroupInformation />
 
         <StudentStatistic assignments={assignments} />
+
+        <StudentPerformanceChart assignments={assignments} />
       </div>
     </DashboardLayout>
   );
