@@ -6,12 +6,12 @@ import { AlertTriangle } from 'lucide-react';
 import { Assignment, AssignmentStatus, NavigationRoute, StudentAssignment, UserRole } from '@/types';
 import { useAuthContext, useGroupsContext } from '@/store';
 import DashboardLayout from '@/components/dashboardLayout/DashboardLayout.tsx';
-import AssignmentDetailTitle from '@/components/AssignmentDetail/AssignmentDetailTitle';
-import AssignmentDetailEssay from '@/components/AssignmentDetail/AssignmentDetailEssay.tsx';
+import AssignmentDetailTitle from '@/components/assignmentDetail/AssignmentDetailTitle';
+import AssignmentDetailEssay from '@/components/assignmentDetail/AssignmentDetailEssay.tsx';
 import { getAssignmentBaseInfoById, getUsersTasksByAssignment } from '@/lib/serverCalls';
-import AssignmentDetailStatistic from '@/components/AssignmentDetail/AssignmentDetailStatistic.tsx';
+import AssignmentDetailStatistic from '@/components/assignmentDetail/AssignmentDetailStatistic.tsx';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import AssignmentDetailStudents from '@/components/AssignmentDetail/AssignmentDetailStudents';
+import AssignmentDetailStudents from '@/components/assignmentDetail/AssignmentDetailStudents';
 
 const AssignmentDetail = () => {
   const { id } = useParams<{ id: string }>();

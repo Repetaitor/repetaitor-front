@@ -5,7 +5,7 @@ import { useAuthContext } from '@/store';
 
 interface GroupsContextType {
   groups: Group[];
-  studentGroup: Group | null;
+  studentGroup: Group | undefined;
   groupsLoading: boolean;
   createNewGroup: (groupName: string) => Promise<void>;
   refetchTeacherGroups: () => Promise<void>;
@@ -19,7 +19,7 @@ export const GroupsProvider = ({ children }: { children: ReactNode }) => {
   const { activeUser } = useAuthContext();
 
   const [groups, setGroups] = useState<Group[]>([]);
-  const [studentGroup, setStudentGroup] = useState<Group | null>(null);
+  const [studentGroup, setStudentGroup] = useState<Group>();
   const [groupsLoading, setGroupsLoading] = useState(true);
 
   const fetchTeacherGroups = useCallback(async () => {
@@ -58,7 +58,7 @@ export const GroupsProvider = ({ children }: { children: ReactNode }) => {
       setStudentGroup(fetchedGroups);
     } catch (error) {
       console.error('Error fetching groups:', error);
-      setStudentGroup(null);
+      setStudentGroup(undefined);
     } finally {
       setGroupsLoading(false);
     }
