@@ -112,3 +112,15 @@ export const evaluateAssignment = async (
     generalComments,
   });
 };
+
+export const getUsersTasksByAssignment = async (assignmentId: number) => {
+  return (
+    await api.get<StudentAssignmentsResponse>(`${SERVER_URL}/${ServerRoutes.GET_USERS_TASKS_BY_ASSIGNMENT}`, {
+      params: {
+        assignmentId,
+        offset: 0,
+        limit: 100,
+      },
+    })
+  ).data.result;
+};

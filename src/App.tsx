@@ -15,6 +15,7 @@ import Editor from '@/pages/Editor.tsx';
 import Submissions from '@/pages/Submissions.tsx';
 import Evaluate from '@/pages/Evaluate.tsx';
 import Feedback from '@/pages/Feedback.tsx';
+import AssignmentDetail from '@/pages/AssignmentDetail.tsx';
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
         <Route path={`${NavigationRoute.GROUPS}/:id`} element={<GroupDetail />} />
         <Route path={NavigationRoute.ESSAYS} element={<Essays />} />
         <Route path={NavigationRoute.ASSIGNMENTS} element={<Assignments />} />
+        <Route path={`${NavigationRoute.ASSIGNMENTS}/:id`} element={<AssignmentDetail />} />
         <Route path={`${NavigationRoute.EDITOR}/:id`} element={<Editor />} />
         <Route path={NavigationRoute.SUBMISSIONS} element={<Submissions />} />
         <Route path={`${NavigationRoute.EVALUATE}/:userId/:assignmentId`} element={<Evaluate />} />
