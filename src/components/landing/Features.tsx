@@ -50,7 +50,7 @@ const Features = () => {
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 animate-fade-in text-3xl font-bold sm:text-4xl">ძლიერი ხელსაწყო განათლებისთვის</h2>
           <p className="animate-fade-in text-lg text-muted-foreground" style={{ animationDelay: '0.2s' }}>
-            შექმნილია მასწავლებლებისა და სტუდენტების გათვალისწინებით, RepetAitor გთავაზობთ ყოვლისმომცველ კომპლექტს
+            შექმნილია მასწავლებლებისა და სტუდენტების აზრის გათვალისწინებით, RepetAitor გთავაზობთ ყოვლისმომცველ კომპლექტს
           </p>
         </div>
 

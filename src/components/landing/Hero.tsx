@@ -1,45 +1,50 @@
-import { useCallback, useMemo, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 import { Button } from '../ui/button';
 
+const ANIMATION_DELAYS = {
+  leftSlide: '0.1s',
+  badge: '0.3s',
+  rightSlide: '0.3s',
+  description: '0.5s',
+  features: '0.7s',
+  buttons: '0.9s',
+} as const;
+
+const ANIMATIONS = {
+  slideInLeft: 'slideInLeft 0.7s ease-out forwards',
+  slideInRight: 'slideInRight 0.7s ease-out forwards',
+  fadeIn: 'fadeIn 0.5s ease-out forwards',
+  slideInUp: 'slideInUp 0.3s ease-out forwards',
+} as const;
+
+const FEATURES = [
+  '16 ქულიანი შეფასების სისტემა',
+  'შეფასების პროცესში დაზოგილი დრო',
+  'მაღალი ხარისხის შეფასებები',
+] as const;
+
+const ESSAY_EXAMPLES = [
+  {
+    text: "The author effectively uses imagery to convey the protagonist's emotional state throughout the narrative...",
+    status: 'green',
+    feedback: 'ლოგიკური ანალიზი დადასტურებული მტკიცებულებებით',
+  },
+  {
+    text: 'The theme of isolation is explored through both setting and characterization, demonstrating how...',
+    status: 'yellow',
+    feedback: 'არ არის კავშირი არგუმენტირებულად ნაჩვენები',
+  },
+  {
+    text: "In conclusion, the novel's exploration of identity through multiple perspectives reveals...",
+    status: 'primary',
+    feedback: 'მისაღები დასკვნა, რომელიც აერთიანებს ძირითად მოსაზრებებს',
+  },
+] as const;
+
 const Hero = () => {
   const heroRef = useRef<HTMLElement>(null);
-
-  const animationDelays = useMemo(
-    () => ({
-      leftSlide: '0.1s',
-      badge: '0.3s',
-      rightSlide: '0.3s',
-      description: '0.5s',
-      features: '0.7s',
-      buttons: '0.9s',
-    }),
-    [],
-  );
-
-  const animations = useMemo(
-    () => ({
-      slideInLeft: {
-        animation: 'slideInLeft 0.7s ease-out forwards',
-      },
-      slideInRight: {
-        animation: 'slideInRight 0.7s ease-out forwards',
-      },
-      fadeIn: {
-        animation: 'fadeIn 0.5s ease-out forwards',
-      },
-      slideInUp: {
-        animation: 'slideInUp 0.3s ease-out forwards',
-      },
-    }),
-    [],
-  );
-
-  const features = useMemo(
-    () => ['16 ქულიანი შეფასების სისტემა', 'შეფასების პროცესში დაზოგილი დრო', 'მაღალი ხარისხის შეფასებები'],
-    [],
-  );
 
   const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -49,65 +54,6 @@ const Hero = () => {
         block: 'start',
       });
     }
-  }, []);
-
-  useEffect(() => {
-    const styleId = 'hero-animations';
-    if (!document.getElementById(styleId)) {
-      const style = document.createElement('style');
-      style.id = styleId;
-      style.textContent = `
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-50px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(50px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes slideInUp {
-          from {
-            opacity: 0;
-            transform: translateY(8px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      `;
-      document.head.appendChild(style);
-    }
-
-    return () => {
-      const existingStyle = document.getElementById(styleId);
-      if (existingStyle) {
-        existingStyle.remove();
-      }
-    };
   }, []);
 
   useEffect(() => {
@@ -138,32 +84,19 @@ const Hero = () => {
           <div
             className="max-w-2xl flex-1 translate-x-[-50px] opacity-0 transition-all duration-700 ease-out"
             style={{
-              animationDelay: animationDelays.leftSlide,
-              ...animations.slideInLeft,
+              animationDelay: ANIMATION_DELAYS.leftSlide,
+              animation: ANIMATIONS.slideInLeft,
             }}
           >
-            <div
-              className="mb-6 inline-flex items-center rounded-full border border-muted px-3 py-1 text-sm opacity-0 transition-opacity duration-500"
-              style={{
-                animationDelay: animationDelays.badge,
-                ...animations.fadeIn,
-              }}
-            >
-              <span className="mr-2 rounded-full bg-primary/20 px-2 py-0.5 text-xs font-medium text-primary">
-                სიახლე
-              </span>
-              <span className="text-muted-foreground">შეცვალეთ თქვენი ესეების შეფასების პროცესი</span>
-            </div>
-
             <h1 className="mb-6 text-balance bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-4xl font-bold leading-snug sm:text-5xl sm:leading-snug lg:text-6xl lg:leading-snug">
-              გარდაქმენით თქვენი ესეების შეფასების პროცესი
+              გაამარტივეთ თქვენი ესეების შეფასების პროცესი
             </h1>
 
             <p
               className="mb-8 max-w-xl text-lg text-muted-foreground opacity-0 transition-opacity duration-500"
               style={{
-                animationDelay: animationDelays.description,
-                ...animations.fadeIn,
+                animationDelay: ANIMATION_DELAYS.description,
+                animation: ANIMATIONS.fadeIn,
               }}
             >
               RepetAitor არის პლატფორმა, რომელიც შექმნილია ესეების შეფასების გასამარტივებლად, რაც პროცესს უფრო ეფექტურს
@@ -173,17 +106,17 @@ const Hero = () => {
             <div
               className="mb-8 space-y-4 opacity-0 transition-opacity duration-500"
               style={{
-                animationDelay: animationDelays.features,
-                ...animations.fadeIn,
+                animationDelay: ANIMATION_DELAYS.features,
+                animation: ANIMATIONS.fadeIn,
               }}
             >
-              {features.map((feature, index) => (
+              {FEATURES.map((feature, index) => (
                 <div
                   key={feature}
                   className="flex translate-y-2 items-start gap-2 opacity-0 transition-all duration-300"
                   style={{
                     animationDelay: `${0.7 + index * 0.1}s`,
-                    ...animations.slideInUp,
+                    animation: ANIMATIONS.slideInUp,
                   }}
                 >
                   <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
@@ -195,8 +128,8 @@ const Hero = () => {
             <div
               className="flex flex-col gap-4 opacity-0 transition-opacity duration-500 sm:flex-row"
               style={{
-                animationDelay: animationDelays.buttons,
-                ...animations.fadeIn,
+                animationDelay: ANIMATION_DELAYS.buttons,
+                animation: ANIMATIONS.fadeIn,
               }}
             >
               <Link to="/register">
@@ -221,8 +154,8 @@ const Hero = () => {
           <div
             className="order-first w-full max-w-xl flex-1 translate-x-[50px] opacity-0 transition-all duration-700 ease-out lg:order-last"
             style={{
-              animationDelay: animationDelays.rightSlide,
-              ...animations.slideInRight,
+              animationDelay: ANIMATION_DELAYS.rightSlide,
+              animation: ANIMATIONS.slideInRight,
             }}
           >
             <div className="relative">
@@ -257,23 +190,7 @@ const Hero = () => {
                   </div>
 
                   <div className="space-y-4">
-                    {[
-                      {
-                        text: "The author effectively uses imagery to convey the protagonist's emotional state throughout the narrative...",
-                        status: 'green',
-                        feedback: 'ლოგიკური ანალიზი დადასტურებული მტკიცებულებებით',
-                      },
-                      {
-                        text: 'The theme of isolation is explored through both setting and characterization, demonstrating how...',
-                        status: 'yellow',
-                        feedback: 'არ არის კავშირი არგუმენტირებულად ნაჩვენები',
-                      },
-                      {
-                        text: "In conclusion, the novel's exploration of identity through multiple perspectives reveals...",
-                        status: 'primary',
-                        feedback: 'მისაღები დასკვნა, რომელიც აერთიანებს ძირითად მოსაზრებებს',
-                      },
-                    ].map((item, index) => (
+                    {ESSAY_EXAMPLES.map((item, index) => (
                       <div
                         key={index}
                         className="rounded-md border border-white/5 bg-secondary/30 p-3 transition-colors duration-200 hover:bg-secondary/40"

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -10,6 +10,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isHomePage = useMemo(() => location.pathname === NavigationRoute.LANDING, [location.pathname]);
 
@@ -22,7 +23,7 @@ const Navbar = () => {
       setIsMobileMenuOpen(false);
 
       if (!isHomePage) {
-        window.location.href = `/#${sectionId}`;
+        navigate(`/#${sectionId}`);
         return;
       }
 
@@ -31,19 +32,19 @@ const Navbar = () => {
         element.scrollIntoView({ behavior: 'smooth' });
       }
     },
-    [isHomePage],
+    [isHomePage, navigate],
   );
 
   const scrollToTop = useCallback(() => {
     setIsMobileMenuOpen(false);
 
     if (!isHomePage) {
-      window.location.href = NavigationRoute.LANDING;
+      navigate(NavigationRoute.LANDING);
       return;
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [isHomePage]);
+  }, [isHomePage, navigate]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -76,7 +77,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex items-center justify-between px-6">
         <button
-          onClick={() => (window.location.href = '/')}
+          onClick={() => navigate(NavigationRoute.LANDING)}
           className="flex items-center gap-2 transition-opacity hover:opacity-80"
         >
           <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-2xl font-bold text-transparent">
@@ -103,12 +104,12 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden items-center space-x-4 md:flex">
-          <Link to="/login">
+          <Link to={NavigationRoute.LOGIN}>
             <Button variant="outline" size="sm">
               შესვლა
             </Button>
           </Link>
-          <Link to="/register">
+          <Link to={NavigationRoute.REGISTER}>
             <Button size="sm">რეგისტრაცია</Button>
           </Link>
         </div>
@@ -146,12 +147,12 @@ const Navbar = () => {
             მუშაობის პრინციპი
           </button>
           <div className="flex flex-col space-y-2 pt-2">
-            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to={NavigationRoute.LOGIN} onClick={() => setIsMobileMenuOpen(false)}>
               <Button variant="outline" className="w-full">
                 Sign In
               </Button>
             </Link>
-            <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to={NavigationRoute.REGISTER} onClick={() => setIsMobileMenuOpen(false)}>
               <Button className="w-full">Get Started</Button>
             </Link>
           </div>
