@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { BookOpen, ClipboardCheck, FileText, LayoutDashboard, Users } from 'lucide-react';
+import { BookOpen, ClipboardCheck, BrainCircuit, FileText, LayoutDashboard, Users } from 'lucide-react';
 import { NavigationItem, NavigationRoute, UserRole } from '@/types';
 import { useAuthContext } from '@/store';
 import { useCallback, useMemo } from 'react';
@@ -14,6 +14,11 @@ const STUDENT_NAV_ITEMS: NavigationItem[] = [
     icon: FileText,
     label: 'დავალებები',
     href: NavigationRoute.ASSIGNMENTS,
+  },
+  {
+    icon: BrainCircuit,
+    label: 'AI დავალებები',
+    href: NavigationRoute.AI_ASSIGNMENTS,
   },
 ];
 

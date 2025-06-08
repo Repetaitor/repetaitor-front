@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/paginaion';
 import { useNavigate } from 'react-router-dom';
 import { NavigationRoute, StudentAssignment } from '@/types';
-import { getFullName } from '@/lib/users.ts';
+import { getFullName } from '@/lib/users.utils';
 
 interface SubmissionsListProps {
   submissions: StudentAssignment[];

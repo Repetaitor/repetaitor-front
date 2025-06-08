@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 import { User as UserIcon, UserPlus, Users } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar.tsx';
-import { getFullName } from '@/lib/users.ts';
+import { getFullName } from '@/lib/users.utils';
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { useGroupsContext } from '@/store';

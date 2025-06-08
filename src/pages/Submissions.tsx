@@ -6,7 +6,7 @@ import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
 import SubmissionsList from '@/components/submissions/SubmissionsList';
 import { useSubmissions } from '@/hooks';
 import { AssignmentStatus } from '@/types';
-import { getFullName } from '@/lib/users.ts';
+import { getFullName } from '@/lib/users.utils';
 
 const Submissions = () => {
   const { submissions, isSubmissionsLoading } = useSubmissions();

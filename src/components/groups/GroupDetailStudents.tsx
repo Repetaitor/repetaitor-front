@@ -5,7 +5,7 @@ import { Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Group, User } from '@/types';
 import { useToast } from '@/hooks';
-import { getFullName } from '@/lib/users';
+import { getFullName } from '@/lib/users.utils';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { removeStudentFromGroup } from '@/lib/serverCalls';
 

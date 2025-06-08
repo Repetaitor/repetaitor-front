@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils.ts';
 import { Card, CardContent } from '@/components/ui/card.tsx';
 import { Badge } from '@/components/ui/badge.tsx';
 import { AlertTriangle, BookOpen, Calendar, CheckCircle2, Clock, FileText } from 'lucide-react';
-import { getFullName } from '@/lib/users.ts';
+import { getFullName } from '@/lib/users.utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button.tsx';
 import { AssignmentStatus, NavigationRoute, StudentAssignment } from '@/types';

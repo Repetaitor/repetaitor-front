@@ -7,8 +7,12 @@ import { useStudentAssignments } from '@/hooks';
 import AssignmentOverview from '@/components/assignments/AssignmentOverview.tsx';
 import { AssignmentStatus } from '@/types';
 
-const Assignments = () => {
-  const { assignments, isAssignmentsLoading } = useStudentAssignments();
+interface AssignmentsProps {
+  isAIAssignment?: boolean;
+}
+
+const Assignments = ({ isAIAssignment = false }: AssignmentsProps) => {
+  const { assignments, isAssignmentsLoading } = useStudentAssignments(isAIAssignment);
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState<string>('ყველა');
 

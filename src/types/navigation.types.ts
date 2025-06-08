@@ -13,6 +13,7 @@ export enum NavigationRoute {
   VERIFY_EMAIL = '/verify-email',
   DASHBOARD = '/dashboard',
   ASSIGNMENTS = '/assignments',
+  AI_ASSIGNMENTS = '/ai-assignments',
   GROUPS = '/groups',
   ESSAYS = '/essays',
   SUBMISSIONS = '/submissions',

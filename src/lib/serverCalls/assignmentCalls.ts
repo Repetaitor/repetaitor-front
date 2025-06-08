@@ -35,11 +35,12 @@ interface StudentAssignmentsResponse {
   totalCount: number;
 }
 
-export const getStudentAssignments = async (studentId: number) => {
+export const getStudentAssignments = async (studentId: number, isAIAssignment: boolean) => {
   return (
     await api.get<StudentAssignmentsResponse>(`${SERVER_URL}/${ServerRoutes.GET_USER_ASSIGNMENTS}`, {
       params: {
         userId: studentId,
+        isAIAssignment,
         offset: 0,
         limit: 100,
       },
