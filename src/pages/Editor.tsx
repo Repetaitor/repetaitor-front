@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { getAssignmentBaseInfoById, getUserAssignment, saveOrSubmitAssignment } from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
 import { Assignment, NavigationRoute } from '@/types';
+import { isAssignmentByAI } from '@/lib/assignments.utils';
 
 const Editor = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,6 +34,8 @@ const Editor = () => {
   const [wordCount, setWordCount] = useState(0);
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isAIAssignment = useMemo(() => assignment && isAssignmentByAI(assignment), [assignment]);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -88,7 +91,7 @@ const Editor = () => {
             title: 'მონაცემები გაიგზავნა',
             description: 'მასწავლებელმა მიიღო ნამუშევარი გასასწორებლად.',
           });
-          navigate(NavigationRoute.ASSIGNMENTS);
+          navigate(isAIAssignment ? NavigationRoute.AI_ASSIGNMENTS : NavigationRoute.ASSIGNMENTS);
         } else {
           toast({
             title: 'ნამუშევარი შენახულია',
@@ -107,7 +110,7 @@ const Editor = () => {
         setIsSubmitDialogOpen(false);
       }
     },
-    [essayContent, id, navigate, toast, wordCount],
+    [essayContent, id, isAIAssignment, navigate, toast, wordCount],
   );
 
   return (
@@ -239,7 +242,10 @@ const Editor = () => {
             <FileText className="mx-auto mb-4 h-16 w-16 text-muted-foreground" />
             <h3 className="text-xl font-medium">დავალება ვერ მოიძებნა</h3>
             <p className="mt-2 text-muted-foreground">დავალებას რომელსაც ეძებ არ არსებობს, ან არ გაქვს მასზე წვდომა.</p>
-            <Button className="mt-6" onClick={() => navigate(NavigationRoute.ASSIGNMENTS)}>
+            <Button
+              className="mt-6"
+              onClick={() => navigate(isAIAssignment ? NavigationRoute.AI_ASSIGNMENTS : NavigationRoute.ASSIGNMENTS)}
+            >
               <ArrowLeft className="mr-2 h-4 w-4" />
               უკან დაბრუნება დავალებების სიაში
             </Button>

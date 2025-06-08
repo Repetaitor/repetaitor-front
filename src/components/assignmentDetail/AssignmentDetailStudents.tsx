@@ -5,7 +5,7 @@ import { AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button.tsx';
 import { AssignmentStatus, NavigationRoute, StudentAssignment } from '@/types';
-import { getFullName } from '@/lib/users.ts';
+import { getFullName } from '@/lib/users.utils';
 
 interface AssignmentDetailStudentsProps {
   studentSubmissions: StudentAssignment[];

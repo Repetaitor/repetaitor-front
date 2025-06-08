@@ -30,6 +30,7 @@ const App = () => {
         <Route path={`${NavigationRoute.GROUPS}/:id`} element={<GroupDetail />} />
         <Route path={NavigationRoute.ESSAYS} element={<Essays />} />
         <Route path={NavigationRoute.ASSIGNMENTS} element={<Assignments />} />
+        <Route path={NavigationRoute.AI_ASSIGNMENTS} element={<Assignments isAIAssignment />} />
         <Route path={`${NavigationRoute.ASSIGNMENTS}/:id`} element={<AssignmentDetail />} />
         <Route path={`${NavigationRoute.EDITOR}/:id`} element={<Editor />} />
         <Route path={NavigationRoute.SUBMISSIONS} element={<Submissions />} />

@@ -12,6 +12,7 @@ import { getAssignmentBaseInfoById, getUsersTasksByAssignment } from '@/lib/serv
 import AssignmentDetailStatistic from '@/components/assignmentDetail/AssignmentDetailStatistic.tsx';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AssignmentDetailStudents from '@/components/assignmentDetail/AssignmentDetailStudents';
+import { isAssignmentByAI } from '@/lib/assignments.utils';
 
 const AssignmentDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +26,8 @@ const AssignmentDetail = () => {
   const [isStudentSubmissionsLoading, setIsStudentSubmissionsLoading] = useState(true);
 
   const isTeacher = activeUser?.role === UserRole.TEACHER;
+
+  const isAIAssignment = useMemo(() => assignment && isAssignmentByAI(assignment), [assignment]);
 
   useEffect(() => {
     if (!id) return;
@@ -114,7 +117,7 @@ const AssignmentDetail = () => {
           <AlertTriangle className="mb-4 h-12 w-12 text-yellow-500" />
           <h1 className="mb-2 text-2xl font-bold">დავალება ვერ მოიძებნა</h1>
           <p className="mb-6 text-muted-foreground">არ არსებობს დავალება ამ ID-ით.</p>
-          <Link to={NavigationRoute.ASSIGNMENTS}>
+          <Link to={isAIAssignment ? NavigationRoute.AI_ASSIGNMENTS : NavigationRoute.ASSIGNMENTS}>
             <Button>უკან დაბრუნება</Button>
           </Link>
         </div>

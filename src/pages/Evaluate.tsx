@@ -8,7 +8,7 @@ import { ArrowLeft, CheckCircle, FileText, MessageCircle, Save, XCircle } from '
 import { useEvaluate, useToast } from '@/hooks';
 import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
 import { Slider } from '@/components/ui/slider.tsx';
-import { getFullName } from '@/lib/users.ts';
+import { getFullName } from '@/lib/users.utils';
 import { EvaluationComment, EvaluationCommentStatus, EvaluationTextComment, NavigationRoute } from '@/types';
 import { evaluateAssignment } from '@/lib/serverCalls';
 

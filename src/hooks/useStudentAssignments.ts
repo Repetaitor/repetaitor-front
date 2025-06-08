@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { StudentAssignment } from '@/types';
 import { getStudentAssignments } from '@/lib/serverCalls';
 
-export const useStudentAssignments = () => {
+export const useStudentAssignments = (isAIAssignment: boolean = false) => {
   const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
   const [isAssignmentsLoading, setIsAssignmentsLoading] = useState(true);
 
@@ -15,7 +15,7 @@ export const useStudentAssignments = () => {
       if (!activeUser) return;
       setIsAssignmentsLoading(true);
       try {
-        const fetchedAssignments = await getStudentAssignments(activeUser.id);
+        const fetchedAssignments = await getStudentAssignments(activeUser.id, isAIAssignment);
         if (!isSubscribed) return;
         setAssignments(fetchedAssignments);
       } catch (error) {
@@ -30,7 +30,7 @@ export const useStudentAssignments = () => {
     return () => {
       isSubscribed = false;
     };
-  }, [activeUser]);
+  }, [activeUser, isAIAssignment]);
 
   return { assignments, isAssignmentsLoading };
 };
