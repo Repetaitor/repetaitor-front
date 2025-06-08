@@ -10,3 +10,16 @@ export type User = {
   lastName: string;
   role: UserRole;
 };
+
+export type TeacherDashboardInfo = {
+  groupsCount: number;
+  enrolledStudentsCount: number;
+  assignmentsCount: number;
+  needEvaluateAssignmentsCount: number;
+  groupPerformanceStats: {
+    dateTime: string;
+    totalScoreAvg: number;
+    grammarScoreAvg: number;
+    fluencyScoreAvg: number;
+  }[];
+};

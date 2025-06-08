@@ -1,5 +1,5 @@
 import { SERVER_URL, ServerRoutes } from '@/constants';
-import { User, UserRole } from '@/types';
+import { TeacherDashboardInfo, User, UserRole } from '@/types';
 import api from './API';
 
 interface RegisterUserResponse {
@@ -40,4 +40,8 @@ export const meAuth = async () => {
 
 export const signOut = async () => {
   return (await api.post(`${SERVER_URL}/${ServerRoutes.SIGN_OUT}`)).data;
+};
+
+export const groupAveragePoints = async () => {
+  return (await api.get<TeacherDashboardInfo>(`${SERVER_URL}/${ServerRoutes.GET_TEACHER_DASHBOARD_INFO}`)).data;
 };
