@@ -42,6 +42,6 @@ export const signOut = async () => {
   return (await api.post(`${SERVER_URL}/${ServerRoutes.SIGN_OUT}`)).data;
 };
 
-export const groupAveragePoints = async () => {
+export const getTeacherDashboardInfo = async () => {
   return (await api.get<TeacherDashboardInfo>(`${SERVER_URL}/${ServerRoutes.GET_TEACHER_DASHBOARD_INFO}`)).data;
 };

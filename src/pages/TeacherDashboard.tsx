@@ -1,90 +1,54 @@
 import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
-import { useEssaysContext, useGroupsContext } from '@/store';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
-import { BookOpen, Users, Clock, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getTeacherDashboardInfo } from '@/lib/serverCalls';
+import { cn } from '@/lib/utils';
 import { NavigationRoute, TeacherDashboardInfo } from '@/types';
-import { useSubmissions } from '@/hooks';
-import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
-import { groupAveragePoints } from '@/lib/serverCalls';
-
-interface StatCardData {
-  title: string;
-  value: number;
-  icon: React.ComponentType<{ className?: string }>;
-  color: string;
-  description: string;
-  link: string;
-}
-
+import { BookOpen, ClipboardCheck, Clock, Users } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 interface PerformanceData {
   month: string;
   score: number;
 }
 
 const TeacherDashboard = () => {
-  const { essays } = useEssaysContext();
-  const { groups } = useGroupsContext();
-  const pendingSubmissions = useSubmissions();
-
   const [teacherDashboardInfo, setTeacherDashboardInfo] = useState<TeacherDashboardInfo>();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const isMountedRef = useRef(true);
-
-  const dashboardStats = useMemo(() => {
-    const totalStudents = groups?.reduce((acc, group) => acc + (group.studentsCount || 0), 0) || 0;
-    const totalGroups = groups?.length || 0;
-    const totalEssays = essays.length;
-    const pendingCount = pendingSubmissions.submissions.length;
-
-    return {
-      totalStudents,
-      totalGroups,
-      totalEssays,
-      pendingCount,
-    };
-  }, [groups, essays.length, pendingSubmissions.submissions.length]);
 
   const statCards = useMemo(
-    (): StatCardData[] => [
+    () => [
       {
         title: 'ჯგუფები',
-        value: dashboardStats.totalGroups,
+        value: teacherDashboardInfo?.groupsCount ?? 0,
         icon: Users,
         color: 'text-blue-500',
         description: 'აქტიური ჯგუფები',
-        link: '/groups',
       },
       {
         title: 'სტუდენტები',
-        value: dashboardStats.totalStudents,
+        value: teacherDashboardInfo?.enrolledStudentsCount ?? 0,
         icon: Users,
         color: 'text-violet-500',
         description: 'ყველა მონაწილე',
-        link: '/students',
       },
       {
         title: 'ესეები',
-        value: dashboardStats.totalEssays,
+        value: teacherDashboardInfo?.assignmentsCount ?? 0,
         icon: BookOpen,
         color: 'text-amber-500',
         description: 'შექმნილი ესეები',
-        link: '/essays',
       },
       {
         title: 'მიმდინარე დავალებები',
-        value: dashboardStats.pendingCount,
+        value: teacherDashboardInfo?.needEvaluateAssignmentsCount ?? 0,
         icon: Clock,
         color: 'text-red-500',
         description: 'შესაფასებელი ესეები',
-        link: '/submissions',
       },
     ],
-    [dashboardStats],
+    [teacherDashboardInfo],
   );
 
   const studentPerformanceData = useMemo((): PerformanceData[] => {
@@ -101,37 +65,32 @@ const TeacherDashboard = () => {
     });
   }, [teacherDashboardInfo?.groupPerformanceStats]);
 
-  const fetchDashboardInfo = useCallback(async () => {
-    if (isLoading) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const fetchedData = await groupAveragePoints();
-
-      if (isMountedRef.current) {
-        setTeacherDashboardInfo(fetchedData);
-      }
-    } catch (err) {
-      if (isMountedRef.current) {
-        const errorMessage = err instanceof Error ? err.message : 'Error fetching dashboard data';
-        setError(errorMessage);
-        console.error('Error fetching assignments:', err);
-      }
-    } finally {
-      if (isMountedRef.current) {
-        setIsLoading(false);
-      }
-    }
-  }, [isLoading]);
   useEffect(() => {
+    let isSubscribed = true;
+
+    const fetchDashboardInfo = async () => {
+      try {
+        setIsLoading(true);
+        const fetchedData = await getTeacherDashboardInfo();
+
+        if (isSubscribed) {
+          setTeacherDashboardInfo(fetchedData);
+        }
+      } catch (err) {
+        console.error('Error fetching assignments:', err);
+      } finally {
+        if (isSubscribed) {
+          setIsLoading(false);
+        }
+      }
+    };
+
     fetchDashboardInfo();
 
     return () => {
-      isMountedRef.current = false;
+      isSubscribed = false;
     };
-  }, [fetchDashboardInfo]);
+  }, []);
 
   const tooltipFormatter = useCallback((value: number) => [`${value} / 16`, 'Average Score'], []);
   const tooltipLabelFormatter = useCallback((label: string) => `Month: ${label}`, []);
@@ -148,7 +107,7 @@ const TeacherDashboard = () => {
   );
 
   return (
-    <DashboardLayout>
+    <DashboardLayout isPageLoading={isLoading}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">მასწავლებლის პანელი</h1>
@@ -157,18 +116,18 @@ const TeacherDashboard = () => {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {statCards.map((stat, i) => {
-            const IconComponent = stat.icon;
+          {statCards.map(({ title, description, color, icon, value }) => {
+            const IconComponent = icon;
             return (
-              <Card key={i} className="glass border-muted/30">
+              <Card key={title} className="glass border-muted/30">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-                      <h3 className="mt-1 text-2xl font-bold">{stat.value}</h3>
-                      <p className="mt-1 text-xs text-muted-foreground">{stat.description}</p>
+                      <p className="text-sm font-medium text-muted-foreground">{title}</p>
+                      <h3 className="mt-1 text-2xl font-bold">{value}</h3>
+                      <p className="mt-1 text-xs text-muted-foreground">{description}</p>
                     </div>
-                    <div className={`rounded-full p-3 ${stat.color} bg-muted`}>
+                    <div className={cn('rounded-full p-3', color, 'bg-muted')}>
                       <IconComponent className="h-6 w-6" />
                     </div>
                   </div>
@@ -188,7 +147,7 @@ const TeacherDashboard = () => {
             </Link>
           </Button>
           <Button variant="outline" className="h-auto flex-col gap-2 py-6" asChild>
-            <Link to="/essays">
+            <Link to={NavigationRoute.ESSAYS}>
               <BookOpen className="mb-2 h-8 w-8" />
               <span className="text-base font-medium">ახალი ესეს შექმნა</span>
               <span className="text-xs text-muted-foreground">დაამატეთ ახალი ესეები</span>
@@ -196,7 +155,7 @@ const TeacherDashboard = () => {
           </Button>
           <Button variant="outline" className="h-auto flex-col gap-2 py-6" asChild>
             <Link to={NavigationRoute.SUBMISSIONS}>
-              <ArrowRight className="mb-2 h-8 w-8" />
+              <ClipboardCheck className="mb-2 h-8 w-8" />
               <span className="text-base font-medium">ნაშრომები</span>
               <span className="text-xs text-muted-foreground">გახსენით მოსწავლეების ნაშრომები</span>
             </Link>
@@ -204,15 +163,13 @@ const TeacherDashboard = () => {
         </div>
 
         {/* Student Performance Chart */}
-        <Card className="glass border-muted/30">
-          <CardHeader>
-            <CardTitle>სტუდენტების შედეგები დროში</CardTitle>
-            {isLoading && <p className="text-sm text-muted-foreground">Loading chart data...</p>}
-            {error && <p className="text-sm text-red-500">Error: {error}</p>}
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              {studentPerformanceData.length > 0 ? (
+        {studentPerformanceData.length >= 2 && (
+          <Card className="glass border-muted/30">
+            <CardHeader>
+              <CardTitle>სტუდენტების საშუალოშედეგები</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={studentPerformanceData} margin={chartMargin}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
@@ -234,16 +191,10 @@ const TeacherDashboard = () => {
                     />
                   </LineChart>
                 </ResponsiveContainer>
-              ) : (
-                <div className="flex h-full items-center justify-center">
-                  <p className="text-muted-foreground">
-                    {isLoading ? 'Loading performance data...' : 'No performance data available'}
-                  </p>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </DashboardLayout>
   );
