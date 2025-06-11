@@ -1,4 +1,4 @@
-export const SERVER_URL = 'https://repetaitor.bsite.net/api';
+export const SERVER_URL = 'https://repetaitor-h4e5hhgeafcufeab.germanywestcentral-01.azurewebsites.net/api';
 
 export enum ServerRoutes {
   // User
