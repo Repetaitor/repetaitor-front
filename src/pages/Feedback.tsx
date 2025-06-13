@@ -1,8 +1,8 @@
 import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
+import ImagesListCard from '@/components/reusable/ImagesListCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import MyImageViewer from '@/components/ui/image';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip.tsx';
 import { isAssignmentByAI } from '@/lib/assignments.utils';
 import { getAssignmentBaseInfoById, getUserAssignment } from '@/lib/serverCalls';
@@ -156,25 +156,9 @@ const Feedback = () => {
               </CardHeader>
               <CardContent className="space-y-4 p-6">{textContentWithComments}</CardContent>
             </Card>
-            {userAssignment.images.length > 0 ? (
-              <Card className="glass mt-6 border-muted/30">
-                <CardHeader>
-                  <CardTitle>მიმაგრებული ფოტოები</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4 text-sm text-muted-foreground">
-                  <div>
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px' }}>
-                      {userAssignment.images.map((img, index) => (
-                        <MyImageViewer key={index} index={index} img={img} />
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <></>
-            )}
+            <ImagesListCard images={userAssignment.images} />
           </div>
+
           {/* Sidebar with feedback summary */}
           {userAssignment.isEvaluated ? (
             <div className="w-full space-y-4 lg:w-1/3">

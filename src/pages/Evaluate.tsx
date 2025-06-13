@@ -11,7 +11,7 @@ import { Slider } from '@/components/ui/slider.tsx';
 import { getFullName } from '@/lib/users.utils';
 import { EvaluationComment, EvaluationCommentStatus, EvaluationTextComment, NavigationRoute } from '@/types';
 import { evaluateAssignment } from '@/lib/serverCalls';
-import MyImageViewer from '@/components/ui/image';
+import ImagesListCard from '@/components/reusable/ImagesListCard';
 
 const Evaluation = () => {
   const { userId, assignmentId } = useParams<{ userId: string; assignmentId: string }>();
@@ -198,24 +198,7 @@ const Evaluation = () => {
                 </Badge>
               </CardFooter>
             </Card>
-            {assignmentEvaluation.images.length > 0 ? (
-              <Card className="glass mt-6 border-muted/30">
-                <CardHeader>
-                  <CardTitle>მიმაგრებული ფოტოები</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4 text-sm text-muted-foreground">
-                  <div>
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px' }}>
-                      {assignmentEvaluation.images.map((img, index) => (
-                        <MyImageViewer key={index} index={index} img={img} />
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <></>
-            )}
+            <ImagesListCard images={assignmentEvaluation.images} />
           </div>
 
           {/* Evaluation sidebar */}

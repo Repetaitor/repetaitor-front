@@ -1,4 +1,5 @@
 import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
+import AttachImageCard from '@/components/editor/AttachImageCard';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,21 +12,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import MyImageViewer from '@/components/ui/image';
-import { Input } from '@/components/ui/input.tsx';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks';
 import { isAssignmentByAI } from '@/lib/assignments.utils';
-import {
-  getAssignmentBaseInfoById,
-  getTextFromImages,
-  getUserAssignment,
-  saveOrSubmitAssignment,
-} from '@/lib/serverCalls';
+import { getAssignmentBaseInfoById, getUserAssignment, saveOrSubmitAssignment } from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
 import { Assignment, NavigationRoute } from '@/types';
 import { Progress } from '@radix-ui/react-progress';
-import { AlertCircle, AlignJustify, ArrowLeft, FileText, Save, Send } from 'lucide-react';
+import { AlertCircle, ArrowLeft, FileText, Save, Send } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -40,9 +34,7 @@ const Editor = () => {
   const [essayContent, setEssayContent] = useState('');
   const [wordCount, setWordCount] = useState(0);
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
-  const [isGeneratingTextDialogOpen, setIsGeneratingTextDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGeneratingText, setIsGeneratingText] = useState(false);
   const [base64Images, setBase64Images] = useState<string[]>([]);
   const isAIAssignment = useMemo(() => assignment && isAssignmentByAI(assignment), [assignment]);
 
@@ -88,38 +80,7 @@ const Editor = () => {
     },
     [countWords],
   );
-  const handleImageChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    const base64s = await Promise.all(files.map(async (file) => await toBase64(file)));
-    setBase64Images((prevState) => [...prevState, ...base64s]);
-  }, []);
-  const handleImagesToText = useCallback(
-    async (isGenerating = false) => {
-      if (!isGenerating) {
-        setIsGeneratingText(false);
-        return;
-      }
-      setIsGeneratingText(true);
-      try {
-        const text = await getTextFromImages(base64Images);
-        setEssayContent(text);
-        const ws = text.trim().split(/\s+/);
-        setWordCount(text.trim() ? ws.length : 0);
-        setIsGeneratingText(false);
-      } catch (error) {
-        console.error('Error submitting essay:', error);
-        toast({
-          title: 'მოხდა შეცდომა',
-          description: 'ოპერაცია ვერ შესრულდა, გთხოვთ სცადოთ თავიდან.',
-          variant: 'danger',
-        });
-      } finally {
-        setIsGeneratingText(false);
-        setIsGeneratingTextDialogOpen(false);
-      }
-    },
-    [base64Images, toast],
-  );
+
   const handleSubmit = useCallback(
     async (isSubmitted = false) => {
       try {
@@ -204,50 +165,12 @@ const Editor = () => {
                   </div>
                 </CardContent>
               </Card>
-              <Card className="glass border-muted/30">
-                <CardHeader>
-                  <CardTitle>ფოტოები</CardTitle>
-                  <CardDescription>ატვირთე ესეს ფოტოები სწორი მიმდევრობით აქ</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4 text-sm text-muted-foreground">
-                  <div>
-                    <Input type="file" accept="image/*" multiple onChange={handleImageChange} />
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px' }}>
-                      {base64Images.map((img, index) => (
-                        <MyImageViewer key={index} index={index} img={img} />
-                      ))}
-                    </div>
-                  </div>
-                  <div style={{ alignContent: 'space-between' }}>
-                    <Dialog open={isGeneratingTextDialogOpen} onOpenChange={setIsGeneratingTextDialogOpen}>
-                      <DialogTrigger asChild>
-                        <Button style={{ color: 'white' }}>
-                          <AlignJustify className="mr-2 h-4 w-4" />
-                          ტექსტის დაგენერირება
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>გსურთ ტექსტის ავტომატურად ჩასმა?</DialogTitle>
-                        </DialogHeader>
-                        <DialogFooter>
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              setIsGeneratingTextDialogOpen(false);
-                            }}
-                          >
-                            გაუქმება
-                          </Button>
-                          <Button onClick={() => handleImagesToText(true)} disabled={isGeneratingText}>
-                            {isGeneratingText ? 'მუშავდება...' : 'ჩასმა'}
-                          </Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                </CardContent>
-              </Card>
+              <AttachImageCard
+                base64Images={base64Images}
+                setBase64Images={setBase64Images}
+                setEssayContent={setEssayContent}
+                countWords={countWords}
+              />
             </div>
 
             {/* Main editor area */}
@@ -340,12 +263,3 @@ const Editor = () => {
   );
 };
 export default Editor;
-
-function toBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file); // converts to base64
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-}
