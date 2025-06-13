@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 const TeacherDashboard = () => {
   const [teacherDashboardInfo, setTeacherDashboardInfo] = useState<TeacherDashboardInfo>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isSubscribed = true;

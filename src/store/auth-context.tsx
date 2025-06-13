@@ -51,6 +51,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     let isSubscribed = true;
 
     const tryLogin = async () => {
+      if (activeUser) return;
       setIsLoginLoading(true);
       try {
         const user = await meAuth();
@@ -78,7 +79,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     return () => {
       isSubscribed = false;
     };
-  }, [location.pathname, navigate, setActiveUser]);
+  }, [activeUser, location.pathname, navigate, setActiveUser]);
 
   return (
     <AuthContext.Provider value={{ activeUser, setActiveUser, isLoginLoading, login, logout }}>
