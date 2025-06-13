@@ -134,7 +134,7 @@ const Evaluation = () => {
         title: 'შეფასება გაიგზავნა',
         description: 'შეფასება მიუვა სტუდენტს და ნახავს თქვენ კომენტარებს.',
       });
-      navigate(NavigationRoute.DASHBOARD);
+      navigate(`${NavigationRoute.FEEDBACK}/${assignmentId}/${userId}`);
     } catch (error) {
       console.error('Error submitting evaluation:', error);
       toast({
