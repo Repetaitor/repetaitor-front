@@ -4,10 +4,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip.tsx';
-import { isAssignmentByAI } from '@/lib/assignments.utils';
 import { getAssignmentBaseInfoById, getUserAssignment } from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
-import { Assignment, AssignmentEvaluation, EvaluationCommentStatus, NavigationRoute } from '@/types';
+import { Assignment, AssignmentEvaluation, EvaluationCommentStatus } from '@/types';
 import { ArrowLeft, CheckCircle, FileText, MessageCircle, XCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -21,8 +20,6 @@ const Feedback = () => {
   const [userAssignment, setUserAssignment] = useState<AssignmentEvaluation>();
   const [assignmentInfo, setAssignmentInfo] = useState<Assignment>();
   const [isLoadingInformation, setIsLoadingInformation] = useState(true);
-
-  const isAIAssignment = useMemo(() => assignmentInfo && isAssignmentByAI(assignmentInfo), [assignmentInfo]);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -111,10 +108,7 @@ const Feedback = () => {
             <FileText className="mx-auto mb-4 h-16 w-16 text-muted-foreground" />
             <h3 className="text-xl font-medium">ესე ვერ მოიძებნა</h3>
             <p className="mt-2 text-muted-foreground">ინფორმაცია ამ ნამუშევარზე ვერ მოიძებნა.</p>
-            <Button
-              className="mt-6"
-              onClick={() => navigate(isAIAssignment ? NavigationRoute.AI_ASSIGNMENTS : NavigationRoute.ASSIGNMENTS)}
-            >
+            <Button className="mt-6" onClick={() => navigate(-1)}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               უკან დაბრუნება
             </Button>
@@ -128,11 +122,7 @@ const Feedback = () => {
     <DashboardLayout isPageLoading={isLoadingInformation}>
       <div className="mx-auto max-w-5xl">
         <div className="mb-6">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate(isAIAssignment ? NavigationRoute.AI_ASSIGNMENTS : NavigationRoute.ASSIGNMENTS)}
-          >
+          <Button variant="outline" size="sm" onClick={() => navigate(-1)}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             უკან დაბრუნება
           </Button>

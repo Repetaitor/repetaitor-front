@@ -1,4 +1,4 @@
-export const SERVER_URL = 'https://repetaitor.bsite.net/api';
+export const SERVER_URL = 'https://repetaitor-h4e5hhgeafcufeab.germanywestcentral-01.azurewebsites.net/api';
 
 export enum ServerRoutes {
   // User
@@ -7,6 +7,9 @@ export enum ServerRoutes {
   ME = 'User/Me',
   SIGN_OUT = 'User/SignOut',
   VERIFY_AUTH_CODE = 'User/VerifyAuthCode',
+  GET_TEACHER_DASHBOARD_INFO = 'User/GetTeacherDashboardInfo',
+  GET_STUDENT_DASHBOARD_INFO = 'User/GetStudentDashboardInfo',
+  GET_USER_INFO_BY_ID = 'User/GetUserInfoById',
 
   // Group
   GET_TEACHER_GROUPS = 'Group/GetTeacherGroups',

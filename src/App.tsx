@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import NotFound from '@/pages/NotFound';
@@ -16,30 +16,30 @@ import Submissions from '@/pages/Submissions.tsx';
 import Evaluate from '@/pages/Evaluate.tsx';
 import Feedback from '@/pages/Feedback.tsx';
 import AssignmentDetail from '@/pages/AssignmentDetail.tsx';
+import StudentDashboard from './pages/StudentDashboard';
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={NavigationRoute.LANDING} element={<Landing />} />
-        <Route path={NavigationRoute.LOGIN} element={<Login />} />
-        <Route path={NavigationRoute.REGISTER} element={<Register />} />
-        <Route path={NavigationRoute.VERIFY_EMAIL} element={<VerifyEmail />} />
-        <Route path={NavigationRoute.DASHBOARD} element={<Dashboard />} />
-        <Route path={NavigationRoute.GROUPS} element={<Groups />} />
-        <Route path={`${NavigationRoute.GROUPS}/:id`} element={<GroupDetail />} />
-        <Route path={NavigationRoute.ESSAYS} element={<Essays />} />
-        <Route path={NavigationRoute.ASSIGNMENTS} element={<Assignments />} />
-        <Route path={NavigationRoute.AI_ASSIGNMENTS} element={<Assignments isAIAssignment />} />
-        <Route path={`${NavigationRoute.ASSIGNMENTS}/:id`} element={<AssignmentDetail />} />
-        <Route path={`${NavigationRoute.EDITOR}/:id`} element={<Editor />} />
-        <Route path={NavigationRoute.SUBMISSIONS} element={<Submissions />} />
-        <Route path={`${NavigationRoute.EVALUATE}/:userId/:assignmentId`} element={<Evaluate />} />
-        <Route path={`${NavigationRoute.FEEDBACK}/:assignmentId`} element={<Feedback />} />
+    <Routes>
+      <Route path={NavigationRoute.LANDING} element={<Landing />} />
+      <Route path={NavigationRoute.LOGIN} element={<Login />} />
+      <Route path={NavigationRoute.REGISTER} element={<Register />} />
+      <Route path={NavigationRoute.VERIFY_EMAIL} element={<VerifyEmail />} />
+      <Route path={NavigationRoute.DASHBOARD} element={<Dashboard />} />
+      <Route path={NavigationRoute.GROUPS} element={<Groups />} />
+      <Route path={`${NavigationRoute.GROUPS}/:id`} element={<GroupDetail />} />
+      <Route path={NavigationRoute.ESSAYS} element={<Essays />} />
+      <Route path={NavigationRoute.ASSIGNMENTS} element={<Assignments />} />
+      <Route path={NavigationRoute.AI_ASSIGNMENTS} element={<Assignments isAIAssignment />} />
+      <Route path={`${NavigationRoute.ASSIGNMENTS}/:id`} element={<AssignmentDetail />} />
+      <Route path={`${NavigationRoute.EDITOR}/:id`} element={<Editor />} />
+      <Route path={NavigationRoute.SUBMISSIONS} element={<Submissions />} />
+      <Route path={`${NavigationRoute.EVALUATE}/:userId/:assignmentId`} element={<Evaluate />} />
+      <Route path={`${NavigationRoute.FEEDBACK}/:assignmentId`} element={<Feedback />} />
+      <Route path={`${NavigationRoute.STUDENT_DASHBOARD}/:userId`} element={<StudentDashboard />} />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 

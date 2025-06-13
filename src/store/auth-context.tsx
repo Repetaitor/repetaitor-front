@@ -1,12 +1,13 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { meAuth, signIn, signOut } from '@/lib/serverCalls';
-import { User } from '@/types';
+import { signIn, signOut } from '@/lib/serverCalls';
+import { NavigationRoute, User } from '@/types';
+import { createContext, Dispatch, ReactNode, SetStateAction, useCallback, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthContextProps {
   activeUser: User | null;
+  setActiveUser: Dispatch<SetStateAction<User | null>>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  isLoginLoading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -17,7 +18,8 @@ type AuthContextProviderProps = {
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [activeUser, setActiveUser] = useState<User | null>(null);
-  const [isLoginLoading, setIsLoginLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const login = useCallback(async (email: string, password: string) => {
     const user = await signIn(email, password);
@@ -30,30 +32,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const logout = useCallback(async () => {
     await signOut();
     setActiveUser(null);
-  }, []);
+    navigate(NavigationRoute.LANDING);
+  }, [navigate]);
 
-  useEffect(() => {
-    let isSubscribed = true;
-
-    const tryLogin = async () => {
-      setIsLoginLoading(true);
-      try {
-        const user = await meAuth();
-        if (isSubscribed) setActiveUser(user);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      } finally {
-        setIsLoginLoading(false);
-      }
-    };
-
-    tryLogin();
-    return () => {
-      isSubscribed = false;
-    };
-  }, []);
-
-  return <AuthContext.Provider value={{ activeUser, login, logout, isLoginLoading }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ activeUser, setActiveUser, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuthContext = () => {

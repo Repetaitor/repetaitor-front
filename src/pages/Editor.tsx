@@ -119,9 +119,9 @@ const Editor = () => {
       {assignment ? (
         <div className="mx-auto max-w-5xl">
           <div className="mb-6">
-            <Button variant="outline" size="sm" onClick={() => navigate('/assignments')}>
+            <Button variant="outline" size="sm" onClick={() => navigate(-1)}>
               <ArrowLeft className="mr-2 h-4 w-4" />
-              დავალებების სიაში დაბრუნება
+              უკან დაბრუნება
             </Button>
           </div>
 
@@ -249,12 +249,9 @@ const Editor = () => {
             <FileText className="mx-auto mb-4 h-16 w-16 text-muted-foreground" />
             <h3 className="text-xl font-medium">დავალება ვერ მოიძებნა</h3>
             <p className="mt-2 text-muted-foreground">დავალებას რომელსაც ეძებ არ არსებობს, ან არ გაქვს მასზე წვდომა.</p>
-            <Button
-              className="mt-6"
-              onClick={() => navigate(isAIAssignment ? NavigationRoute.AI_ASSIGNMENTS : NavigationRoute.ASSIGNMENTS)}
-            >
+            <Button className="mt-6" onClick={() => navigate(-1)}>
               <ArrowLeft className="mr-2 h-4 w-4" />
-              უკან დაბრუნება დავალებების სიაში
+              უკან დაბრუნება
             </Button>
           </div>
         </div>

@@ -4,7 +4,7 @@ import DashboardLayout from '@/components/dashboardLayout/DashboardLayout.tsx';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input.tsx';
 import { useEffect, useMemo, useState } from 'react';
-import { NavigationRoute, User, UserRole } from '@/types';
+import { User, UserRole } from '@/types';
 import GroupDetailHeader from '@/components/groups/GroupDetailHeader.tsx';
 import GroupDetailCode from '@/components/groups/GroupDetailCode';
 import GroupDetailStatistic from '@/components/groups/GroupDetailStatistic.tsx';
@@ -22,25 +22,38 @@ const GroupDetail = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [students, setStudents] = useState<User[]>([]);
+  const [isLoadingStudents, setIsLoadingStudents] = useState(true);
 
   const group = useMemo(() => groups.find((g) => g.id === Number(id)), [groups, id]);
 
-  const { groupAssignments, addAssignment } = useGroupAssignments(group?.id);
+  const { groupAssignments, addAssignment, isLoadingGroupAssignments } = useGroupAssignments(group?.id);
 
   useEffect(() => {
-    if (group) {
-      getGroupStudents(group.id).then((students) => {
-        setStudents(students);
-      });
-    }
+    let isSubscribed = true;
+    const fetchStudents = async () => {
+      try {
+        if (!group) return;
+        setIsLoadingStudents(true);
+        const students = await getGroupStudents(group.id);
+        if (isSubscribed) setStudents(students);
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      } finally {
+        if (isSubscribed) setIsLoadingStudents(false);
+      }
+    };
+    fetchStudents();
+    return () => {
+      isSubscribed = false;
+    };
   }, [group]);
 
   if (activeUser?.role !== UserRole.TEACHER || !group) {
     return (
-      <DashboardLayout>
+      <DashboardLayout isPageLoading={isLoadingGroupAssignments || isLoadingStudents}>
         <div className="flex h-full flex-col items-center justify-center">
           <h1 className="mb-4 text-2xl font-bold">ჯგუფი არ მოიძებნა</h1>
-          <Button variant="outline" className="mt-4" onClick={() => navigate(NavigationRoute.DASHBOARD)}>
+          <Button variant="outline" className="mt-4" onClick={() => navigate(-1)}>
             უკან დაბრუნება
           </Button>
         </div>
@@ -49,7 +62,7 @@ const GroupDetail = () => {
   }
 
   return (
-    <DashboardLayout>
+    <DashboardLayout isPageLoading={isLoadingGroupAssignments || isLoadingStudents}>
       <div className="space-y-6">
         <GroupDetailHeader groupName={group.groupName} />
 
