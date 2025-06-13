@@ -37,7 +37,7 @@ export const EssaysProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setEssaysLoading(false);
     }
-  }, []);
+  }, [activeUser]);
 
   useEffect(() => {
     fetchEssays();
