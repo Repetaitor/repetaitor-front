@@ -53,3 +53,11 @@ export const getStudentDashboardInfo = async (userId: number) => {
     })
   ).data;
 };
+
+export const getUserInfoById = async (userId: number) => {
+  return (
+    await api.get<User>(`${SERVER_URL}/${ServerRoutes.GET_USER_INFO_BY_ID}`, {
+      params: { userId },
+    })
+  ).data;
+};

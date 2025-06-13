@@ -16,6 +16,7 @@ import Submissions from '@/pages/Submissions.tsx';
 import Evaluate from '@/pages/Evaluate.tsx';
 import Feedback from '@/pages/Feedback.tsx';
 import AssignmentDetail from '@/pages/AssignmentDetail.tsx';
+import StudentDashboard from './pages/StudentDashboard';
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
         <Route path={NavigationRoute.SUBMISSIONS} element={<Submissions />} />
         <Route path={`${NavigationRoute.EVALUATE}/:userId/:assignmentId`} element={<Evaluate />} />
         <Route path={`${NavigationRoute.FEEDBACK}/:assignmentId`} element={<Feedback />} />
+        <Route path={`${NavigationRoute.STUDENT_DASHBOARD}/:userId`} element={<StudentDashboard />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

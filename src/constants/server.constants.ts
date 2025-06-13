@@ -9,6 +9,7 @@ export enum ServerRoutes {
   VERIFY_AUTH_CODE = 'User/VerifyAuthCode',
   GET_TEACHER_DASHBOARD_INFO = 'User/GetTeacherDashboardInfo',
   GET_STUDENT_DASHBOARD_INFO = 'User/GetStudentDashboardInfo',
+  GET_USER_INFO_BY_ID = 'User/GetUserInfoById',
 
   // Group
   GET_TEACHER_GROUPS = 'Group/GetTeacherGroups',

@@ -4,16 +4,20 @@ import { createNewAssignment, getGroupAssignments } from '@/lib/serverCalls/assi
 
 export const useGroupAssignments = (groupId?: number) => {
   const [groupAssignments, setGroupAssignments] = useState<Assignment[]>([]);
+  const [isLoadingGroupAssignments, setIsLoadingGroupAssignments] = useState(true);
 
   useEffect(() => {
     let isSubscribed = true;
     const fetchAssignments = async () => {
-      if (!groupId) return;
       try {
+        if (!groupId) return;
+        setIsLoadingGroupAssignments(true);
         const fetchedAssignments = await getGroupAssignments(groupId); // Replace with actual group ID
         if (isSubscribed) setGroupAssignments(fetchedAssignments);
       } catch (error) {
         console.error('Error fetching assignments:', error);
+      } finally {
+        if (isSubscribed) setIsLoadingGroupAssignments(false);
       }
     };
     fetchAssignments();
@@ -31,5 +35,5 @@ export const useGroupAssignments = (groupId?: number) => {
     [groupId],
   );
 
-  return { groupAssignments, addAssignment };
+  return { groupAssignments, addAssignment, isLoadingGroupAssignments };
 };
