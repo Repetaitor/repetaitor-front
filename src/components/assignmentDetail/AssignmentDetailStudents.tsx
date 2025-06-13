@@ -54,10 +54,18 @@ const AssignmentDetailStudents = ({ studentSubmissions, essayWordCount }: Assign
 
                 <TableCell>{submission.totalScore || 'არ შეფასებულა'}</TableCell>
                 <TableCell className="text-right">
-                  {submission.status.name === AssignmentStatus.Complete && !submission.isEvaluated && (
-                    <Link to={`${NavigationRoute.EVALUATE}/${submission.student.id}/${submission.assignment.id}`}>
-                      <Button size="sm">შეაფასე</Button>
-                    </Link>
+                  {submission.status.name === AssignmentStatus.Complete && (
+                    <>
+                      {!submission.isEvaluated ? (
+                        <Link to={`${NavigationRoute.EVALUATE}/${submission.student.id}/${submission.assignment.id}`}>
+                          <Button size="sm">შეაფასე</Button>
+                        </Link>
+                      ) : (
+                        <Link to={`${NavigationRoute.FEEDBACK}/${submission.assignment.id}/${submission.student.id}`}>
+                          <Button size="sm">ნახვა</Button>
+                        </Link>
+                      )}
+                    </>
                   )}
                 </TableCell>
               </TableRow>

@@ -39,7 +39,12 @@ const Feedback = () => {
         const fetchedAssignmentEvaluation = await getUserAssignment(userIdToFetch, Number(assignmentId));
         const fetchedAssignmentInfo = await getAssignmentBaseInfoById(Number(assignmentId));
         if (!isSubscribed) return;
-        if (!fetchedAssignmentEvaluation.isPublic && activeUser?.id !== fetchedAssignmentEvaluation.userId) return;
+        if (
+          !fetchedAssignmentEvaluation.isPublic &&
+          activeUser.id !== fetchedAssignmentEvaluation.userId &&
+          activeUser.id !== fetchedAssignmentInfo.creator.id
+        )
+          return;
         setUserAssignment(fetchedAssignmentEvaluation);
         setAssignmentInfo(fetchedAssignmentInfo);
       } catch (error) {
