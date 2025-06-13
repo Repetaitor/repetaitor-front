@@ -11,7 +11,7 @@ export type User = {
   role: UserRole;
 };
 
-type TimeBasedAvgScore = {
+export type TimeBasedAvgScore = {
   dateTime: string;
   totalScoreAvg: number;
   grammarScoreAvg: number;
@@ -22,6 +22,19 @@ export type TeacherDashboardInfo = {
   groupsCount: number;
   enrolledStudentsCount: number;
   assignmentsCount: number;
+  essayCount: number;
   needEvaluateAssignmentsCount: number;
   groupPerformanceStats: TimeBasedAvgScore[];
+};
+
+export type StudentDashboardInfo = {
+  completedAssignmentsCount: number;
+  inProgressAssignmentsCount: number;
+  pendingAssignmentsCount: number;
+  userScoresStats: {
+    avgTotalScore: number;
+    avgGrammarScore: number;
+    avgFluencyScore: number;
+  };
+  userPerformanceStats: TimeBasedAvgScore[];
 };

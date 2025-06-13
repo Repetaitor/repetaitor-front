@@ -8,6 +8,7 @@ export enum ServerRoutes {
   SIGN_OUT = 'User/SignOut',
   VERIFY_AUTH_CODE = 'User/VerifyAuthCode',
   GET_TEACHER_DASHBOARD_INFO = 'User/GetTeacherDashboardInfo',
+  GET_STUDENT_DASHBOARD_INFO = 'User/GetStudentDashboardInfo',
 
   // Group
   GET_TEACHER_GROUPS = 'Group/GetTeacherGroups',

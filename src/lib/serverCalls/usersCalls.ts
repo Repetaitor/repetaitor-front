@@ -1,5 +1,5 @@
 import { SERVER_URL, ServerRoutes } from '@/constants';
-import { TeacherDashboardInfo, User, UserRole } from '@/types';
+import { StudentDashboardInfo, TeacherDashboardInfo, User, UserRole } from '@/types';
 import api from './API';
 
 interface RegisterUserResponse {
@@ -44,4 +44,12 @@ export const signOut = async () => {
 
 export const getTeacherDashboardInfo = async () => {
   return (await api.get<TeacherDashboardInfo>(`${SERVER_URL}/${ServerRoutes.GET_TEACHER_DASHBOARD_INFO}`)).data;
+};
+
+export const getStudentDashboardInfo = async (userId: number) => {
+  return (
+    await api.get<StudentDashboardInfo>(`${SERVER_URL}/${ServerRoutes.GET_STUDENT_DASHBOARD_INFO}`, {
+      params: { userId },
+    })
+  ).data;
 };
