@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { Essay } from '@/types';
+import { Essay, UserRole } from '@/types';
 import { useAuthContext } from '@/store';
 import { addNewEssay, deleteEssay, getEssays, updateEssay } from '@/lib/serverCalls/essayCalls.ts';
 
@@ -26,6 +26,7 @@ export const EssaysProvider = ({ children }: { children: ReactNode }) => {
   const [essaysLoading, setEssaysLoading] = useState(true);
 
   const fetchEssays = useCallback(async () => {
+    if (activeUser?.role !== UserRole.TEACHER) return;
     setEssaysLoading(true);
     try {
       const fetchedEssays = await getEssays();

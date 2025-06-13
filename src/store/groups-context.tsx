@@ -37,8 +37,10 @@ export const GroupsProvider = ({ children }: { children: ReactNode }) => {
   }, [activeUser]);
 
   useEffect(() => {
+    if (activeUser?.role !== UserRole.TEACHER) return;
+
     fetchTeacherGroups();
-  }, [fetchTeacherGroups]);
+  }, [activeUser?.role, fetchTeacherGroups]);
 
   const createNewGroup = useCallback(async (groupName: string) => {
     const newGroup = await createGroup(groupName);
@@ -65,8 +67,10 @@ export const GroupsProvider = ({ children }: { children: ReactNode }) => {
   }, [activeUser]);
 
   useEffect(() => {
+    if (activeUser?.role !== UserRole.STUDENT) return;
+
     fetchStudentGroup();
-  }, [fetchStudentGroup]);
+  }, [activeUser?.role, fetchStudentGroup]);
 
   const joinGroup = useCallback(
     async (groupCode: string) => {
