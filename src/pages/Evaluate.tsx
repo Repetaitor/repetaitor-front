@@ -156,7 +156,7 @@ const Evaluation = () => {
             <p className="mt-2 text-muted-foreground">
               ნამუშევარი რომლის შესწორებასაც ცდილობთ, ვერ მოიძებნა. ან არ გაქვთ შეფასების უფლება.
             </p>
-            <Button className="mt-6" onClick={() => navigate(NavigationRoute.DASHBOARD)}>
+            <Button className="mt-6" onClick={() => navigate(-1)}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               უკან დაბრუნება
             </Button>
@@ -169,7 +169,7 @@ const Evaluation = () => {
   return (
     <DashboardLayout isPageLoading={isEvaluateInfoLoading}>
       <div className="mx-auto max-w-7xl">
-        <Button variant="outline" size="sm" className="mb-6" onClick={() => navigate(NavigationRoute.DASHBOARD)}>
+        <Button variant="outline" size="sm" className="mb-6" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           უკან დაბრუნება
         </Button>

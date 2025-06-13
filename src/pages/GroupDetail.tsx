@@ -4,7 +4,7 @@ import DashboardLayout from '@/components/dashboardLayout/DashboardLayout.tsx';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input.tsx';
 import { useEffect, useMemo, useState } from 'react';
-import { NavigationRoute, User, UserRole } from '@/types';
+import { User, UserRole } from '@/types';
 import GroupDetailHeader from '@/components/groups/GroupDetailHeader.tsx';
 import GroupDetailCode from '@/components/groups/GroupDetailCode';
 import GroupDetailStatistic from '@/components/groups/GroupDetailStatistic.tsx';
@@ -53,7 +53,7 @@ const GroupDetail = () => {
       <DashboardLayout isPageLoading={isLoadingGroupAssignments || isLoadingStudents}>
         <div className="flex h-full flex-col items-center justify-center">
           <h1 className="mb-4 text-2xl font-bold">ჯგუფი არ მოიძებნა</h1>
-          <Button variant="outline" className="mt-4" onClick={() => navigate(NavigationRoute.DASHBOARD)}>
+          <Button variant="outline" className="mt-4" onClick={() => navigate(-1)}>
             უკან დაბრუნება
           </Button>
         </div>

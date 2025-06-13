@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { NavigationRoute } from '@/types';
 
 interface GroupDetailHeaderProps {
   groupName: string;
@@ -12,7 +11,7 @@ const GroupDetailHeader = ({ groupName }: GroupDetailHeaderProps) => {
 
   return (
     <div className="flex items-center gap-2">
-      <Button variant="ghost" size="icon" onClick={() => navigate(NavigationRoute.GROUPS)}>
+      <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
         <ArrowLeft className="h-5 w-5" />
       </Button>
       <div>
