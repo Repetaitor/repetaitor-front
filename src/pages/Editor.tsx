@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { AlertCircle, ArrowLeft, FileText, Save, Send } from 'lucide-react';
+import { AlertCircle, AlignJustify, ArrowLeft, FileText, Pin, PinOff, Save, Send, CircleX } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -12,15 +12,25 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogOverlay,
+  DialogClose,
+  DialogPortal
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks';
 import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
 import { Progress } from '@radix-ui/react-progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { getAssignmentBaseInfoById, getUserAssignment, saveOrSubmitAssignment } from '@/lib/serverCalls';
+import {
+  getAssignmentBaseInfoById,
+  getTextFromImages,
+  getUserAssignment,
+  saveOrSubmitAssignment,
+} from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
 import { Assignment, NavigationRoute } from '@/types';
 import { isAssignmentByAI } from '@/lib/assignments.utils';
+import { Input } from '@/components/ui/input.tsx';
+import MyImageViewer from '@/components/ui/image';
 
 const Editor = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,8 +43,11 @@ const Editor = () => {
   const [essayContent, setEssayContent] = useState('');
   const [wordCount, setWordCount] = useState(0);
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
+  const [isGeneratingTextDialogOpen, setIsGeneratingTextDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isGeneratingText, setIsGeneratingText] = useState(false);
+  const [isImagesPinnedToAssign, setIsImagesPinnedToAssign] = useState(false);
+  const [base64Images, setBase64Images] = useState<string[]>([]);
   const isAIAssignment = useMemo(() => assignment && isAssignmentByAI(assignment), [assignment]);
 
   useEffect(() => {
@@ -50,6 +63,7 @@ const Editor = () => {
         if (userAssignment && userAssignment.text) {
           setEssayContent(userAssignment.text);
           setWordCount(userAssignment.wordCount);
+          setBase64Images(userAssignment.images);
         }
       } catch (error) {
         console.error('Error fetching assignment:', error);
@@ -78,13 +92,42 @@ const Editor = () => {
     },
     [countWords],
   );
-
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const base64s = await Promise.all(
+      files.map(async (file) => await toBase64(file))
+    );
+    setBase64Images(base64s);
+  };
+  const handleImagesToText = async (isGenerating = false) => {
+      if(!isGenerating) {
+        setIsGeneratingText(false);
+        return;
+      }
+      setIsGeneratingText(true);
+      try {
+        var text = await getTextFromImages(base64Images)
+        setEssayContent(text);
+        const ws = text.trim().split(/\s+/);
+        setWordCount(text.trim() ? ws.length : 0);
+        setIsGeneratingText(false);
+      } catch (error) {
+        console.error('Error submitting essay:', error);
+        toast({
+          title: 'მოხდა შეცდომა',
+          description: 'ოპერაცია ვერ შესრულდა, გთხოვთ სცადოთ თავიდან.',
+          variant: 'danger',
+        });
+      } finally {
+        setIsGeneratingText(false);
+        setIsGeneratingTextDialogOpen(false);
+      }
+  };
   const handleSubmit = useCallback(
     async (isSubmitted = false) => {
       try {
         setIsSubmitting(true);
-
-        await saveOrSubmitAssignment(Number(id), essayContent, wordCount, isSubmitted);
+        await saveOrSubmitAssignment(Number(id), essayContent, wordCount, isSubmitted, isImagesPinnedToAssign ? base64Images : []);
 
         if (isSubmitted) {
           toast({
@@ -110,7 +153,7 @@ const Editor = () => {
         setIsSubmitDialogOpen(false);
       }
     },
-    [essayContent, id, isAIAssignment, navigate, toast, wordCount],
+    [essayContent, id, isAIAssignment, navigate, toast, wordCount, isImagesPinnedToAssign],
   );
 
   return (
@@ -161,6 +204,50 @@ const Editor = () => {
                       </div>
                       <Progress value={(wordCount / assignment.essay.expectedWordCount) * 100} className="h-2" />
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="glass border-muted/30">
+                <CardHeader>
+                  <CardTitle>ფოტოები</CardTitle>
+                  <CardDescription>ატვირთე ესეს ფოტოები სწორი მიმდევრობით აქ</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4 text-sm text-muted-foreground">
+                  <div>
+                    <Input type="file" accept="image/*" onChange={handleImageChange} />
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px' }}>
+                      {base64Images.map((img, index) => (
+                        <MyImageViewer key={index} index={index} img={img} />
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{alignContent : 'space-between'}}>
+                    <Dialog open={isGeneratingTextDialogOpen} onOpenChange={setIsGeneratingTextDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button style={{color: 'white'}}>
+                          <AlignJustify className="mr-2 h-4 w-4" />
+                          ტექსტის დაგენერირება
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>გსურთ ტექსტის ავტომატურად ჩასმა?</DialogTitle>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <Button variant="outline" onClick={() => {setIsGeneratingTextDialogOpen(false);}}>
+                            გაუქმება
+                          </Button>
+                          <Button onClick={() => handleImagesToText(true)} disabled={isGeneratingText}>
+                            {isGeneratingText ? 'მუშავდება...' : 'ჩასმა'}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                    <Button className='mt-2' style={{color: 'white', backgroundColor: isImagesPinnedToAssign ? 'red' : 'green'}} onClick={() => setIsImagesPinnedToAssign(prevState => !prevState)}>
+                        {isImagesPinnedToAssign ?  <PinOff className="mr-2 h-4 w-4" /> :
+                          <Pin className="mr-2 h-4 w-4" />}
+                        {isImagesPinnedToAssign ? 'დავალებიდან მოხსნა' : 'დავალებაზე მიმაგრება'}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -256,3 +343,12 @@ const Editor = () => {
   );
 };
 export default Editor;
+
+function toBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file); // converts to base64
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+}

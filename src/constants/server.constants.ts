@@ -33,4 +33,5 @@ export enum ServerRoutes {
   GET_USER_ESSAY = 'Essay/GetUserEssay',
   UPDATE_ESSAY = 'Essay/UpdateEssay',
   DELETE_ESSAY = 'Essay/DeleteEssay',
+  GET_TEXT_FROM_IMAGES = 'Assignment/GetTextFromImage',
 }
