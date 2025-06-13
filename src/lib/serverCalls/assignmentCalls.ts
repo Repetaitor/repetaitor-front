@@ -142,3 +142,11 @@ export const getPublicUserAssignments = async (assignmentId: number) => {
     })
   ).data;
 };
+
+export const changeUserAssignmentPublicStatus = async (assignmentId: number) => {
+  return (
+    await api.put<{ result: boolean }>(`${SERVER_URL}/${ServerRoutes.CHANGE_USER_ASSIGNMENT_PUBLIC_STATUS}`, {
+      assignmentId,
+    })
+  ).data.result;
+};

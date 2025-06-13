@@ -4,15 +4,19 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip.tsx';
-import { getAssignmentBaseInfoById, getUserAssignment } from '@/lib/serverCalls';
+import { useToast } from '@/hooks';
+import { isAssignmentByAI } from '@/lib/assignments.utils';
+import { changeUserAssignmentPublicStatus, getAssignmentBaseInfoById, getUserAssignment } from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
-import { Assignment, AssignmentEvaluation, EvaluationCommentStatus, NavigationRoute } from '@/types';
-import { ArrowLeft, CheckCircle, FileText, MessageCircle, Users, XCircle } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Assignment, AssignmentEvaluation, EvaluationCommentStatus, NavigationRoute, UserRole } from '@/types';
+import { ArrowLeft, CheckCircle, FileText, MessageCircle, Share, Users, XCircle } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Feedback = () => {
   const { assignmentId, userId } = useParams<{ assignmentId: string; userId: string }>();
+
+  const { toast } = useToast();
 
   const navigate = useNavigate();
   const { activeUser } = useAuthContext();
@@ -20,6 +24,10 @@ const Feedback = () => {
   const [userAssignment, setUserAssignment] = useState<AssignmentEvaluation>();
   const [assignmentInfo, setAssignmentInfo] = useState<Assignment>();
   const [isLoadingInformation, setIsLoadingInformation] = useState(true);
+
+  const [isMakingPublicInProgress, setIsMakingPublicInProgress] = useState(false);
+
+  const isAIAssignment = useMemo(() => assignmentInfo && isAssignmentByAI(assignmentInfo), [assignmentInfo]);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -48,6 +56,36 @@ const Feedback = () => {
       isSubscribed = false;
     };
   }, [activeUser, assignmentId, userId]);
+
+  const togglePublicStatus = useCallback(async () => {
+    if (isMakingPublicInProgress) return;
+    setIsMakingPublicInProgress(true);
+    try {
+      const isPublic = await changeUserAssignmentPublicStatus(Number(assignmentId));
+      if (isPublic) {
+        toast({
+          title: 'ნამუშევარი წარმატებით გახდა საჯარო.',
+          variant: 'default',
+        });
+      } else {
+        toast({
+          title: 'ნამუშევარის საჯარო მონახულების შეცდომა.',
+          variant: 'danger',
+        });
+      }
+      setUserAssignment((prevAssignment) =>
+        prevAssignment ? { ...prevAssignment, isPublic: !prevAssignment.isPublic } : undefined,
+      );
+    } catch (error) {
+      console.error('Error changing public status:', error);
+      toast({
+        title: 'ნამუშევარის გასაჯაროებისას მოხდა შეცდომა.',
+        variant: 'danger',
+      });
+    } finally {
+      setIsMakingPublicInProgress(false);
+    }
+  }, [assignmentId, isMakingPublicInProgress, toast]);
 
   const textContentWithComments = useMemo(() => {
     let lastIndex = 0;
@@ -128,10 +166,21 @@ const Feedback = () => {
             <ArrowLeft className="mr-2 h-4 w-4" />
             უკან დაბრუნება
           </Button>
-          <Button variant="outline" onClick={() => navigate(`${NavigationRoute.PUBLIC_SUBMISSIONS}/${assignmentId}`)}>
-            <Users className="mr-2 h-4 w-4" />
-            სხვა მოხმარებლების ნამუშევარები
-          </Button>
+          {activeUser?.role === UserRole.STUDENT && isAIAssignment && userAssignment.userId === activeUser.id && (
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={togglePublicStatus} disabled={isMakingPublicInProgress}>
+                <Share className="mr-2 h-4 w-4" />
+                {userAssignment.isPublic ? 'გახადე მალული' : 'გახადე საჯარო'}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate(`${NavigationRoute.PUBLIC_SUBMISSIONS}/${assignmentId}`)}
+              >
+                <Users className="mr-2 h-4 w-4" />
+                სხვა მოხმარებლების ნამუშევარები
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-6 lg:flex-row">
