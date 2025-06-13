@@ -1,11 +1,21 @@
-import { signIn, signOut } from '@/lib/serverCalls';
+import { meAuth, signIn, signOut } from '@/lib/serverCalls';
 import { NavigationRoute, User } from '@/types';
-import { createContext, Dispatch, ReactNode, SetStateAction, useCallback, useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface AuthContextProps {
   activeUser: User | null;
   setActiveUser: Dispatch<SetStateAction<User | null>>;
+  isLoginLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -18,8 +28,10 @@ type AuthContextProviderProps = {
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [activeUser, setActiveUser] = useState<User | null>(null);
+  const [isLoginLoading, setIsLoginLoading] = useState(true);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const login = useCallback(async (email: string, password: string) => {
     const user = await signIn(email, password);
@@ -35,7 +47,44 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     navigate(NavigationRoute.LANDING);
   }, [navigate]);
 
-  return <AuthContext.Provider value={{ activeUser, setActiveUser, login, logout }}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    let isSubscribed = true;
+
+    const tryLogin = async () => {
+      setIsLoginLoading(true);
+      try {
+        const user = await meAuth();
+        if (isSubscribed) setActiveUser(user);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        if (!isSubscribed) return;
+        setActiveUser(null);
+        if (
+          ![
+            NavigationRoute.LANDING,
+            NavigationRoute.LOGIN,
+            NavigationRoute.REGISTER,
+            NavigationRoute.VERIFY_EMAIL,
+          ].includes(location.pathname as NavigationRoute)
+        ) {
+          navigate(NavigationRoute.LANDING);
+        }
+      } finally {
+        setIsLoginLoading(false);
+      }
+    };
+
+    tryLogin();
+    return () => {
+      isSubscribed = false;
+    };
+  }, [location.pathname, navigate, setActiveUser]);
+
+  return (
+    <AuthContext.Provider value={{ activeUser, setActiveUser, isLoginLoading, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuthContext = () => {

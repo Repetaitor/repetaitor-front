@@ -1,14 +1,11 @@
-import { FC, ReactNode, useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import LoadingAnimation from '@/components/ui/loading-animation.tsx';
+import { useToast } from '@/hooks';
 import { cn } from '@/lib/utils';
+import { useAuthContext } from '@/store';
+import { FC, ReactNode, useCallback, useState } from 'react';
 import MobileHeader from './MobileHeader';
 import MobileMenu from './MobileMenu';
 import Sidebar from './Sidebar';
-import { useAuthContext } from '@/store';
-import { useToast } from '@/hooks';
-import { NavigationRoute } from '@/types';
-import LoadingAnimation from '@/components/ui/loading-animation.tsx';
-import { meAuth } from '@/lib/serverCalls';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -16,38 +13,12 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: FC<DashboardLayoutProps> = ({ children, isPageLoading }) => {
-  const { logout, setActiveUser } = useAuthContext();
-  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const { logout, isLoginLoading } = useAuthContext();
 
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    const tryLogin = async () => {
-      setIsLoginLoading(true);
-      try {
-        const user = await meAuth();
-        if (isSubscribed) setActiveUser(user);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        if (!isSubscribed) return;
-        setActiveUser(null);
-        navigate(NavigationRoute.LANDING);
-      } finally {
-        setIsLoginLoading(false);
-      }
-    };
-
-    tryLogin();
-    return () => {
-      isSubscribed = false;
-    };
-  }, [navigate, setActiveUser]);
 
   const handleLogout = useCallback(async () => {
     try {
