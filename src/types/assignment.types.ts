@@ -30,6 +30,7 @@ export type StudentAssignment = {
   submitDate: Date;
   totalScore: number;
   actualWordCount: number;
+  isPublic: boolean;
 };
 
 export type AssignmentEvaluation = {
@@ -46,6 +47,7 @@ export type AssignmentEvaluation = {
   evaluationComments: EvaluationTextComment[];
   images: string[];
   feedbackSeen: boolean;
+  isPublic: boolean;
 };
 
 export enum EvaluationCommentStatus {

@@ -6,13 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip.tsx';
 import { getAssignmentBaseInfoById, getUserAssignment } from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
-import { Assignment, AssignmentEvaluation, EvaluationCommentStatus } from '@/types';
-import { ArrowLeft, CheckCircle, FileText, MessageCircle, XCircle } from 'lucide-react';
+import { Assignment, AssignmentEvaluation, EvaluationCommentStatus, NavigationRoute } from '@/types';
+import { ArrowLeft, CheckCircle, FileText, MessageCircle, Users, XCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Feedback = () => {
-  const { assignmentId } = useParams<{ assignmentId: string }>();
+  const { assignmentId, userId } = useParams<{ assignmentId: string; userId: string }>();
 
   const navigate = useNavigate();
   const { activeUser } = useAuthContext();
@@ -27,9 +27,11 @@ const Feedback = () => {
       if (!activeUser) return;
       setIsLoadingInformation(true);
       try {
-        const fetchedAssignmentEvaluation = await getUserAssignment(activeUser.id, Number(assignmentId));
+        const userIdToFetch = userId ? Number(userId) : activeUser.id;
+        const fetchedAssignmentEvaluation = await getUserAssignment(userIdToFetch, Number(assignmentId));
         const fetchedAssignmentInfo = await getAssignmentBaseInfoById(Number(assignmentId));
         if (!isSubscribed) return;
+        if (!fetchedAssignmentEvaluation.isPublic && activeUser?.id !== fetchedAssignmentEvaluation.userId) return;
         setUserAssignment(fetchedAssignmentEvaluation);
         setAssignmentInfo(fetchedAssignmentInfo);
       } catch (error) {
@@ -45,7 +47,7 @@ const Feedback = () => {
     return () => {
       isSubscribed = false;
     };
-  }, [activeUser, assignmentId]);
+  }, [activeUser, assignmentId, userId]);
 
   const textContentWithComments = useMemo(() => {
     let lastIndex = 0;
@@ -121,10 +123,14 @@ const Feedback = () => {
   return (
     <DashboardLayout isPageLoading={isLoadingInformation}>
       <div className="mx-auto max-w-5xl">
-        <div className="mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <Button variant="outline" size="sm" onClick={() => navigate(-1)}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             უკან დაბრუნება
+          </Button>
+          <Button variant="outline" onClick={() => navigate(`${NavigationRoute.PUBLIC_SUBMISSIONS}/${assignmentId}`)}>
+            <Users className="mr-2 h-4 w-4" />
+            სხვა მოხმარებლების ნამუშევარები
           </Button>
         </div>
 
