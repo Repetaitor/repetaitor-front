@@ -15,7 +15,7 @@ import { useToast } from '@/hooks';
 import { toBase64 } from '@/lib/base64';
 import { getTextFromImages } from '@/lib/serverCalls';
 import { AlignJustify } from 'lucide-react';
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react';
 
 interface AttachImageCardProps {
   base64Images: string[];
@@ -27,6 +27,7 @@ interface AttachImageCardProps {
 const AttachImageCard = ({ base64Images, setBase64Images, setEssayContent, countWords }: AttachImageCardProps) => {
   const [isGeneratingText, setIsGeneratingText] = useState(false);
   const [isGeneratingTextDialogOpen, setIsGeneratingTextDialogOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { toast } = useToast();
 
@@ -35,6 +36,16 @@ const AttachImageCard = ({ base64Images, setBase64Images, setEssayContent, count
       const files = Array.from(e.target.files || []);
       const base64s = await Promise.all(files.map(async (file) => await toBase64(file)));
       setBase64Images((prevState) => [...prevState, ...base64s]);
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
+    },
+    [setBase64Images],
+  );
+
+  const handleRemoveImage = useCallback(
+    (img: string) => {
+      setBase64Images((prevState) => prevState.filter((base64Image) => base64Image !== img));
     },
     [setBase64Images],
   );
@@ -66,10 +77,10 @@ const AttachImageCard = ({ base64Images, setBase64Images, setEssayContent, count
       </CardHeader>
       <CardContent className="flex flex-col gap-4 text-sm text-muted-foreground">
         <div>
-          <Input type="file" accept="image/*" multiple onChange={handleImageChange} />
+          <Input ref={inputRef} type="file" accept="image/*" multiple onChange={handleImageChange} />
           <div className="mt-5 flex flex-wrap gap-2.5">
-            {base64Images.map((img, index) => (
-              <ImageViewer key={index} index={index} img={img} />
+            {base64Images.map((img) => (
+              <ImageViewer key={img} img={img} onRemove={handleRemoveImage} />
             ))}
           </div>
         </div>
