@@ -51,7 +51,21 @@ const Editor = () => {
         if (userAssignment && userAssignment.text) {
           setEssayContent(userAssignment.text);
           setWordCount(userAssignment.wordCount);
-          setBase64Images(userAssignment.images);
+          const base64Images = await Promise.all(
+            userAssignment.images.map(async (imageUrl) => {
+              const response = await fetch(imageUrl);
+              const blob = await response.blob();
+              return await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  resolve(reader.result as string);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+              });
+            }),
+          );
+          setBase64Images(base64Images as string[]);
         }
       } catch (error) {
         console.error('Error fetching assignment:', error);
