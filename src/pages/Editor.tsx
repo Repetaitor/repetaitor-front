@@ -97,7 +97,7 @@ const Editor = () => {
     const base64s = await Promise.all(
       files.map(async (file) => await toBase64(file))
     );
-    setBase64Images(base64s);
+    setBase64Images(prevState => [...prevState, ...base64s]);
   };
   const handleImagesToText = async (isGenerating = false) => {
       if(!isGenerating) {
@@ -214,7 +214,7 @@ const Editor = () => {
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4 text-sm text-muted-foreground">
                   <div>
-                    <Input type="file" accept="image/*" onChange={handleImageChange} />
+                    <Input type="file" accept="image/*" multiple  onChange={handleImageChange} />
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px' }}>
                       {base64Images.map((img, index) => (
                         <MyImageViewer key={index} index={index} img={img} />
