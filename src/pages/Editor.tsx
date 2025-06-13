@@ -1,9 +1,8 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
+import AttachImageCard from '@/components/editor/AttachImageCard';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { AlertCircle, ArrowLeft, FileText, Save, Send } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -13,14 +12,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks';
-import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
-import { Progress } from '@radix-ui/react-progress';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { isAssignmentByAI } from '@/lib/assignments.utils';
 import { getAssignmentBaseInfoById, getUserAssignment, saveOrSubmitAssignment } from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
 import { Assignment, NavigationRoute } from '@/types';
-import { isAssignmentByAI } from '@/lib/assignments.utils';
+import { Progress } from '@radix-ui/react-progress';
+import { AlertCircle, ArrowLeft, FileText, Save, Send } from 'lucide-react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Editor = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,7 +35,7 @@ const Editor = () => {
   const [wordCount, setWordCount] = useState(0);
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [base64Images, setBase64Images] = useState<string[]>([]);
   const isAIAssignment = useMemo(() => assignment && isAssignmentByAI(assignment), [assignment]);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ const Editor = () => {
         if (userAssignment && userAssignment.text) {
           setEssayContent(userAssignment.text);
           setWordCount(userAssignment.wordCount);
+          setBase64Images(userAssignment.images);
         }
       } catch (error) {
         console.error('Error fetching assignment:', error);
@@ -83,8 +85,7 @@ const Editor = () => {
     async (isSubmitted = false) => {
       try {
         setIsSubmitting(true);
-
-        await saveOrSubmitAssignment(Number(id), essayContent, wordCount, isSubmitted);
+        await saveOrSubmitAssignment(Number(id), essayContent, wordCount, isSubmitted, base64Images);
 
         if (isSubmitted) {
           toast({
@@ -110,7 +111,7 @@ const Editor = () => {
         setIsSubmitDialogOpen(false);
       }
     },
-    [essayContent, id, isAIAssignment, navigate, toast, wordCount],
+    [essayContent, id, isAIAssignment, navigate, toast, wordCount, base64Images],
   );
 
   return (
@@ -164,6 +165,12 @@ const Editor = () => {
                   </div>
                 </CardContent>
               </Card>
+              <AttachImageCard
+                base64Images={base64Images}
+                setBase64Images={setBase64Images}
+                setEssayContent={setEssayContent}
+                countWords={countWords}
+              />
             </div>
 
             {/* Main editor area */}

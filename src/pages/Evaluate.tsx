@@ -11,6 +11,7 @@ import { Slider } from '@/components/ui/slider.tsx';
 import { getFullName } from '@/lib/users.utils';
 import { EvaluationComment, EvaluationCommentStatus, EvaluationTextComment, NavigationRoute } from '@/types';
 import { evaluateAssignment } from '@/lib/serverCalls';
+import ImagesListCard from '@/components/reusable/ImagesListCard';
 
 const Evaluation = () => {
   const { userId, assignmentId } = useParams<{ userId: string; assignmentId: string }>();
@@ -197,6 +198,7 @@ const Evaluation = () => {
                 </Badge>
               </CardFooter>
             </Card>
+            <ImagesListCard images={assignmentEvaluation.images} />
           </div>
 
           {/* Evaluation sidebar */}

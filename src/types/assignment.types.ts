@@ -44,6 +44,7 @@ export type AssignmentEvaluation = {
   fluencyScore: number;
   generalComments: EvaluationComment[];
   evaluationComments: EvaluationTextComment[];
+  images: string[];
   feedbackSeen: boolean;
 };
 

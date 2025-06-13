@@ -1,4 +1,5 @@
 import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
+import ImagesListCard from '@/components/reusable/ImagesListCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -145,6 +146,7 @@ const Feedback = () => {
               </CardHeader>
               <CardContent className="space-y-4 p-6">{textContentWithComments}</CardContent>
             </Card>
+            <ImagesListCard images={userAssignment.images} />
           </div>
 
           {/* Sidebar with feedback summary */}
