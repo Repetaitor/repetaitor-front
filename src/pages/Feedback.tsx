@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { AlignJustify, ArrowLeft, CheckCircle, FileText, MessageCircle, Pin, PinOff, XCircle } from 'lucide-react';
 import DashboardLayout from '@/components/dashboardLayout/DashboardLayout';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import MyImageViewer from '@/components/ui/image';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip.tsx';
-import { Assignment, AssignmentEvaluation, EvaluationCommentStatus, NavigationRoute } from '@/types';
+import { isAssignmentByAI } from '@/lib/assignments.utils';
 import { getAssignmentBaseInfoById, getUserAssignment } from '@/lib/serverCalls';
 import { useAuthContext } from '@/store';
-import { isAssignmentByAI } from '@/lib/assignments.utils';
-import MyImageViewer from '@/components/ui/image';
+import { Assignment, AssignmentEvaluation, EvaluationCommentStatus, NavigationRoute } from '@/types';
+import { ArrowLeft, CheckCircle, FileText, MessageCircle, XCircle } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Feedback = () => {
   const { assignmentId } = useParams<{ assignmentId: string }>();
@@ -156,8 +156,8 @@ const Feedback = () => {
               </CardHeader>
               <CardContent className="space-y-4 p-6">{textContentWithComments}</CardContent>
             </Card>
-            {userAssignment.images.length > 0 ?
-              (<Card className="glass border-muted/30 mt-6">
+            {userAssignment.images.length > 0 ? (
+              <Card className="glass mt-6 border-muted/30">
                 <CardHeader>
                   <CardTitle>მიმაგრებული ფოტოები</CardTitle>
                 </CardHeader>
@@ -170,62 +170,63 @@ const Feedback = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>)
-              : (<></>)
-            }
+              </Card>
+            ) : (
+              <></>
+            )}
           </div>
-            {/* Sidebar with feedback summary */}
-            {userAssignment.isEvaluated ? (
-                <div className="w-full space-y-4 lg:w-1/3">
-                <Card className="glass border-muted/30">
-                  <CardHeader>
-                    <CardTitle>შედეგები</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1 text-center">
-                          <div className="text-2xl font-bold text-green-500">{userAssignment.grammarScore}</div>
-                          <div className="mt-1 text-sm text-muted-foreground">გრამატიკა</div>
-                          <div className="text-xs text-muted-foreground">8 ქულიდან</div>
-                        </div>
-                        <div className="flex-1 text-center">
-                          <div className="text-2xl font-bold text-green-500">{userAssignment.fluencyScore}</div>
-                          <div className="mt-1 text-sm text-muted-foreground">ანალიზი</div>
-                          <div className="text-xs text-muted-foreground">8 ქულიდან</div>
-                        </div>
-                        <div className="flex-1 text-center">
-                          <div className="text-3xl font-bold text-green-500">
-                            {userAssignment.fluencyScore + userAssignment.grammarScore}
-                          </div>
-                          <div className="mt-1 text-sm text-muted-foreground">ჯამში</div>
-                          <div className="text-xs text-muted-foreground">16 ქულიდან</div>
-                        </div>
+          {/* Sidebar with feedback summary */}
+          {userAssignment.isEvaluated ? (
+            <div className="w-full space-y-4 lg:w-1/3">
+              <Card className="glass border-muted/30">
+                <CardHeader>
+                  <CardTitle>შედეგები</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 text-center">
+                        <div className="text-2xl font-bold text-green-500">{userAssignment.grammarScore}</div>
+                        <div className="mt-1 text-sm text-muted-foreground">გრამატიკა</div>
+                        <div className="text-xs text-muted-foreground">8 ქულიდან</div>
                       </div>
-
-                      <div>
-                        <h3 className="mb-2 text-sm font-medium">სიტყვების რაოდენობა:</h3>
-                        <p className="text-sm">{userAssignment.wordCount} სიტყვა</p>
+                      <div className="flex-1 text-center">
+                        <div className="text-2xl font-bold text-green-500">{userAssignment.fluencyScore}</div>
+                        <div className="mt-1 text-sm text-muted-foreground">ანალიზი</div>
+                        <div className="text-xs text-muted-foreground">8 ქულიდან</div>
                       </div>
-
-                      <div className="space-y-3">
-                        <h3 className="text-sm font-medium">ლეგენდა</h3>
-                        <div className="flex items-center">
-                          <span className="mr-2 h-3 w-3 rounded-full bg-green-500"></span>
-                          <span className="text-sm">მშვენიერია</span>
+                      <div className="flex-1 text-center">
+                        <div className="text-3xl font-bold text-green-500">
+                          {userAssignment.fluencyScore + userAssignment.grammarScore}
                         </div>
-                        <div className="flex items-center">
-                          <span className="mr-2 h-3 w-3 rounded-full bg-yellow-500"></span>
-                          <span className="text-sm">რჩევა</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="mr-2 h-3 w-3 rounded-full bg-red-500"></span>
-                          <span className="text-sm">არასწორია</span>
-                        </div>
+                        <div className="mt-1 text-sm text-muted-foreground">ჯამში</div>
+                        <div className="text-xs text-muted-foreground">16 ქულიდან</div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+
+                    <div>
+                      <h3 className="mb-2 text-sm font-medium">სიტყვების რაოდენობა:</h3>
+                      <p className="text-sm">{userAssignment.wordCount} სიტყვა</p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-medium">ლეგენდა</h3>
+                      <div className="flex items-center">
+                        <span className="mr-2 h-3 w-3 rounded-full bg-green-500"></span>
+                        <span className="text-sm">მშვენიერია</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="mr-2 h-3 w-3 rounded-full bg-yellow-500"></span>
+                        <span className="text-sm">რჩევა</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="mr-2 h-3 w-3 rounded-full bg-red-500"></span>
+                        <span className="text-sm">არასწორია</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
               <Card className="glass border-muted/30">
                 <CardHeader>
@@ -281,19 +282,19 @@ const Feedback = () => {
                   </div>
                 </CardContent>
               </Card>
-                </div>
-              ) : (
-              <Card className="glass border-muted/30">
-                <CardHeader>
-                  <CardTitle>შეფასება</CardTitle>
-                </CardHeader>
-                <CardContent>ამჟამად მასწავლებელს არ აქვს შესწორებული ნამუშევარი.</CardContent>
-              </Card>
-              )}
             </div>
-            </div>
-            </DashboardLayout>
-            );
-          };
+          ) : (
+            <Card className="glass border-muted/30">
+              <CardHeader>
+                <CardTitle>შეფასება</CardTitle>
+              </CardHeader>
+              <CardContent>ამჟამად მასწავლებელს არ აქვს შესწორებული ნამუშევარი.</CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
+    </DashboardLayout>
+  );
+};
 
 export default Feedback;

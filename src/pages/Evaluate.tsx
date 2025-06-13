@@ -198,8 +198,8 @@ const Evaluation = () => {
                 </Badge>
               </CardFooter>
             </Card>
-            {assignmentEvaluation.images.length > 0 ?
-              (<Card className="glass border-muted/30 mt-6">
+            {assignmentEvaluation.images.length > 0 ? (
+              <Card className="glass mt-6 border-muted/30">
                 <CardHeader>
                   <CardTitle>მიმაგრებული ფოტოები</CardTitle>
                 </CardHeader>
@@ -212,9 +212,10 @@ const Evaluation = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>)
-              : (<></>)
-            }
+              </Card>
+            ) : (
+              <></>
+            )}
           </div>
 
           {/* Evaluation sidebar */}

@@ -63,7 +63,7 @@ export const saveOrSubmitAssignment = async (
   text: string,
   wordCount: number,
   isSubmitted: boolean,
-  images : string[],
+  images: string[],
 ) => {
   return (
     await api.post<void>(`${SERVER_URL}/${ServerRoutes.SAVE_OR_SUBMIT_ASSIGNMENT}`, {
@@ -71,7 +71,7 @@ export const saveOrSubmitAssignment = async (
       text,
       wordCount,
       isSubmitted,
-      images
+      images,
     })
   ).data;
 };
@@ -129,9 +129,6 @@ export const getUsersTasksByAssignment = async (assignmentId: number) => {
 };
 
 export const getTextFromImages = async (base64Array: string[]) => {
-  const response = await api.post<string>(
-    `${SERVER_URL}/${ServerRoutes.GET_TEXT_FROM_IMAGES}`,
-    base64Array
-  );
+  const response = await api.post<string>(`${SERVER_URL}/${ServerRoutes.GET_TEXT_FROM_IMAGES}`, base64Array);
   return response.data;
 };
