@@ -18,7 +18,8 @@ const AssignmentOverview = ({ assignment }: AssignmentOverviewProps) => {
         className={cn(
           'h-1.5',
           assignment.status.name === AssignmentStatus.Complete && 'bg-green-500',
-          assignment.status.name === AssignmentStatus.InProgress ? 'bg-yellow-500' : 'bg-blue-500',
+          assignment.status.name === AssignmentStatus.InProgress && 'bg-yellow-500',
+          assignment.status.name === AssignmentStatus.Pending && 'bg-blue-500',
         )}
       />
       <CardContent className="pt-6">
