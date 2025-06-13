@@ -45,9 +45,7 @@ const Editor = () => {
   const [isGeneratingText, setIsGeneratingText] = useState(false);
   const [base64Images, setBase64Images] = useState<string[]>([]);
   const isAIAssignment = useMemo(() => assignment && isAssignmentByAI(assignment), [assignment]);
-  useEffect(() => {
-    console.log(base64Images);
-  }, [base64Images]);
+
   useEffect(() => {
     let isSubscribed = true;
     const fetchAssignments = async () => {
@@ -95,30 +93,33 @@ const Editor = () => {
     const base64s = await Promise.all(files.map(async (file) => await toBase64(file)));
     setBase64Images((prevState) => [...prevState, ...base64s]);
   }, []);
-  const handleImagesToText = async (isGenerating = false) => {
-    if (!isGenerating) {
-      setIsGeneratingText(false);
-      return;
-    }
-    setIsGeneratingText(true);
-    try {
-      const text = await getTextFromImages(base64Images);
-      setEssayContent(text);
-      const ws = text.trim().split(/\s+/);
-      setWordCount(text.trim() ? ws.length : 0);
-      setIsGeneratingText(false);
-    } catch (error) {
-      console.error('Error submitting essay:', error);
-      toast({
-        title: 'მოხდა შეცდომა',
-        description: 'ოპერაცია ვერ შესრულდა, გთხოვთ სცადოთ თავიდან.',
-        variant: 'danger',
-      });
-    } finally {
-      setIsGeneratingText(false);
-      setIsGeneratingTextDialogOpen(false);
-    }
-  };
+  const handleImagesToText = useCallback(
+    async (isGenerating = false) => {
+      if (!isGenerating) {
+        setIsGeneratingText(false);
+        return;
+      }
+      setIsGeneratingText(true);
+      try {
+        const text = await getTextFromImages(base64Images);
+        setEssayContent(text);
+        const ws = text.trim().split(/\s+/);
+        setWordCount(text.trim() ? ws.length : 0);
+        setIsGeneratingText(false);
+      } catch (error) {
+        console.error('Error submitting essay:', error);
+        toast({
+          title: 'მოხდა შეცდომა',
+          description: 'ოპერაცია ვერ შესრულდა, გთხოვთ სცადოთ თავიდან.',
+          variant: 'danger',
+        });
+      } finally {
+        setIsGeneratingText(false);
+        setIsGeneratingTextDialogOpen(false);
+      }
+    },
+    [base64Images, toast],
+  );
   const handleSubmit = useCallback(
     async (isSubmitted = false) => {
       try {
