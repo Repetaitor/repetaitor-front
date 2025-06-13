@@ -132,3 +132,21 @@ export const getTextFromImages = async (base64Array: string[]) => {
   const response = await api.post<string>(`${SERVER_URL}/${ServerRoutes.GET_TEXT_FROM_IMAGES}`, base64Array);
   return response.data;
 };
+
+export const getPublicUserAssignments = async (assignmentId: number) => {
+  return (
+    await api.get<StudentAssignment[]>(`${SERVER_URL}/${ServerRoutes.GET_PUBLIC_USER_ASSIGNMENTS}`, {
+      params: {
+        assignmentId,
+      },
+    })
+  ).data;
+};
+
+export const changeUserAssignmentPublicStatus = async (assignmentId: number) => {
+  return (
+    await api.put<{ result: boolean }>(`${SERVER_URL}/${ServerRoutes.CHANGE_USER_ASSIGNMENT_PUBLIC_STATUS}`, {
+      assignmentId,
+    })
+  ).data.result;
+};
