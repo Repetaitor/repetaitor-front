@@ -21,7 +21,7 @@ import { useToast } from '@/hooks';
 
 const essayFormSchema = z.object({
   essayTitle: z.string().min(5, { message: 'სათაური უნდა იყოს მინიმუმ 5 სიმბოლოიანი' }),
-  essayDescription: z.string().optional(),
+  essayDescription: z.string().min(10, { message: 'აღწერა უნდა იყოს მინიმუმ 10 სიმბოლოიანი' }),
   expectedWordCount: z.coerce.number().min(50, { message: 'სიტყვების რაოდენობა უნდა იყოს მინიმუმ 50' }),
 });
 
@@ -58,7 +58,7 @@ const AddNewEssay = ({
     if (editingEssay) {
       form.reset({
         essayTitle: editingEssay.essayTitle,
-        essayDescription: editingEssay.essayDescription || '',
+        essayDescription: editingEssay.essayDescription,
         expectedWordCount: editingEssay.expectedWordCount,
       });
     } else {
@@ -75,14 +75,14 @@ const AddNewEssay = ({
       setIsUpdatingEssay(true);
       try {
         if (editingEssay) {
-          await editEssay(editingEssay.id, values.essayTitle, values.essayDescription ?? '', values.expectedWordCount);
+          await editEssay(editingEssay.id, values.essayTitle, values.essayDescription, values.expectedWordCount);
 
           toast({
             title: 'ესე განახლდა',
             description: `ესე წარმატებით განახლდა.`,
           });
         } else {
-          await createNewEssay(values.essayTitle, values.essayDescription ?? '', values.expectedWordCount);
+          await createNewEssay(values.essayTitle, values.essayDescription, values.expectedWordCount);
 
           toast({
             title: 'ესე შეიქმნა',
@@ -147,9 +147,9 @@ const AddNewEssay = ({
               name="essayDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>აღწერა (Optional)</FormLabel>
+                  <FormLabel>აღწერა</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="ეიყვანე მოკლედ ესეს აღწერა..." className="min-h-24" {...field} />
+                    <Textarea placeholder="შეიყვანე მოკლედ ესეს აღწერა..." className="min-h-24" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
