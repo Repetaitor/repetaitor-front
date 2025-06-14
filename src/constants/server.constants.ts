@@ -32,6 +32,7 @@ export enum ServerRoutes {
   GET_USERS_TASKS_BY_ASSIGNMENT = 'Assignment/GetUsersTasksByAssignment',
   GET_PUBLIC_USER_ASSIGNMENTS = 'Assignment/GetPublicUserAssignments',
   CHANGE_USER_ASSIGNMENT_PUBLIC_STATUS = 'Assignment/ChangeUserAssignmentPublicStatus',
+  DELETE_ASSIGNMENT = 'Assignment/DeleteAssignment',
 
   // Essay
   ADD_NEW_ESSAY = 'Essay/AddNewEssay',

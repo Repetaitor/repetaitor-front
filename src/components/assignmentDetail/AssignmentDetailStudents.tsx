@@ -52,7 +52,7 @@ const AssignmentDetailStudents = ({ studentSubmissions, essayWordCount }: Assign
                   {submission.actualWordCount} / {essayWordCount}
                 </TableCell>
 
-                <TableCell>{submission.totalScore || 'არ შეფასებულა'}</TableCell>
+                <TableCell>{submission.totalScore >= 0 ? submission.totalScore : '-'}</TableCell>
                 <TableCell className="text-right">
                   {submission.status.name === AssignmentStatus.Complete && (
                     <>

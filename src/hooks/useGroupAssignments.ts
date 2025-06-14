@@ -1,6 +1,6 @@
 import { Assignment } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
-import { createNewAssignment, getGroupAssignments } from '@/lib/serverCalls/assignmentCalls.ts';
+import { createNewAssignment, deleteAssignment, getGroupAssignments } from '@/lib/serverCalls/assignmentCalls.ts';
 
 export const useGroupAssignments = (groupId?: number) => {
   const [groupAssignments, setGroupAssignments] = useState<Assignment[]>([]);
@@ -35,5 +35,21 @@ export const useGroupAssignments = (groupId?: number) => {
     [groupId],
   );
 
-  return { groupAssignments, addAssignment, isLoadingGroupAssignments };
+  const removeAssignment = useCallback(
+    async (assignmentId: number) => {
+      if (!groupId) return;
+      try {
+        setIsLoadingGroupAssignments(true);
+        await deleteAssignment(assignmentId);
+        setGroupAssignments((prev) => prev.filter((assignment) => assignment.id !== assignmentId));
+      } catch (error) {
+        console.error('Error deleting assignment:', error);
+      } finally {
+        setIsLoadingGroupAssignments(false);
+      }
+    },
+    [groupId],
+  );
+
+  return { groupAssignments, addAssignment, isLoadingGroupAssignments, removeAssignment };
 };

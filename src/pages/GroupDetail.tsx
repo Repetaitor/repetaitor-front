@@ -26,7 +26,9 @@ const GroupDetail = () => {
 
   const group = useMemo(() => groups.find((g) => g.id === Number(id)), [groups, id]);
 
-  const { groupAssignments, addAssignment, isLoadingGroupAssignments } = useGroupAssignments(group?.id);
+  const { groupAssignments, addAssignment, isLoadingGroupAssignments, removeAssignment } = useGroupAssignments(
+    group?.id,
+  );
 
   useEffect(() => {
     let isSubscribed = true;
@@ -82,7 +84,7 @@ const GroupDetail = () => {
           </div>
           <GroupDetailAssignments
             groupAssignments={groupAssignments}
-            removeAssignment={() => {}}
+            removeAssignment={removeAssignment}
             addAssignment={addAssignment}
           />
         </div>

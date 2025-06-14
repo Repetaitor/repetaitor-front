@@ -150,3 +150,13 @@ export const changeUserAssignmentPublicStatus = async (assignmentId: number) => 
     })
   ).data.result;
 };
+
+export const deleteAssignment = async (assignmentId: number) => {
+  return (
+    await api.delete<void>(`${SERVER_URL}/${ServerRoutes.DELETE_ASSIGNMENT}`, {
+      params: {
+        assignmentId,
+      },
+    })
+  ).data;
+};
