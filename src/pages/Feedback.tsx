@@ -94,7 +94,7 @@ const Feedback = () => {
 
   const textContentWithComments = useMemo(() => {
     let lastIndex = 0;
-    const elements = [];
+    const elements: JSX.Element[] = [];
     if (!userAssignment) return null;
 
     userAssignment.evaluationComments
@@ -142,7 +142,7 @@ const Feedback = () => {
       elements.push(<span key={`last-text-end`}>{userAssignment.text.substring(lastIndex)}</span>);
     }
 
-    return <p className="leading-7">{elements}</p>;
+    return <div className="whitespace-pre-wrap leading-7">{elements}</div>;
   }, [userAssignment]);
 
   if (!userAssignment || !assignmentInfo) {

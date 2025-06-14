@@ -54,7 +54,6 @@ const Evaluation = () => {
 
     const getOffset = (node: Node, offset: number): number => {
       let charCount = 0;
-
       const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
       while (walker.nextNode()) {
         const currentNode = walker.currentNode;
@@ -188,9 +187,13 @@ const Evaluation = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4 p-6">
-                <p ref={paragraphRef} className="leading-7 selection:bg-primary/30" onMouseUp={handleTextSelection}>
+                <div
+                  ref={paragraphRef}
+                  className="whitespace-pre-wrap leading-7 selection:bg-primary/30"
+                  onMouseUp={handleTextSelection}
+                >
                   {assignmentEvaluation.text}
-                </p>
+                </div>
               </CardContent>
               <CardFooter className="justify-between border-t border-muted/30 py-4">
                 <Badge variant="outline" className="mr-2">
