@@ -5,12 +5,12 @@ import { FileText, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AddAssignmentButton from '@/components/groups/AddAssignmentButton.tsx';
 import { useToast } from '@/hooks';
-import { Assignment, NavigationRoute } from '@/types';
+import { AssignmentWithCompletion, NavigationRoute } from '@/types';
 import { useCallback } from 'react';
 import { useEssaysContext } from '@/store';
 
 interface GroupDetailAssignmentsProps {
-  groupAssignments: Assignment[];
+  groupAssignments: AssignmentWithCompletion[];
   removeAssignment: (assignmentId: number) => void;
   addAssignment: (essayId: number, dueDate: Date, instructions?: string) => Promise<void>;
 }
@@ -64,7 +64,7 @@ const GroupDetailAssignments = ({ groupAssignments, removeAssignment, addAssignm
                   >
                     <TableCell>{essayTitle}</TableCell>
                     <TableCell>{new Date(assignment.dueDate).toLocaleDateString()}</TableCell>
-                    <TableCell>10%</TableCell> {/* Placeholder for completion percentage */}
+                    <TableCell>{assignment.completedPercentage}%</TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="ghost"

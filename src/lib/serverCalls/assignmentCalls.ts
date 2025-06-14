@@ -1,6 +1,13 @@
 import api from './API';
 import { SERVER_URL, ServerRoutes } from '@/constants';
-import { Assignment, AssignmentEvaluation, EvaluationComment, EvaluationTextComment, StudentAssignment } from '@/types';
+import {
+  Assignment,
+  AssignmentEvaluation,
+  AssignmentWithCompletion,
+  EvaluationComment,
+  EvaluationTextComment,
+  StudentAssignment,
+} from '@/types';
 
 export const createNewAssignment = async (groupId: number, essayId: number, dueDate: Date, instructions?: string) => {
   return (
@@ -14,7 +21,7 @@ export const createNewAssignment = async (groupId: number, essayId: number, dueD
 };
 
 interface AssignmentsResponse {
-  result: Assignment[];
+  result: AssignmentWithCompletion[];
   totalCount: number;
 }
 

@@ -1,9 +1,9 @@
-import { Assignment } from '@/types';
+import { AssignmentWithCompletion } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 import { createNewAssignment, deleteAssignment, getGroupAssignments } from '@/lib/serverCalls/assignmentCalls.ts';
 
 export const useGroupAssignments = (groupId?: number) => {
-  const [groupAssignments, setGroupAssignments] = useState<Assignment[]>([]);
+  const [groupAssignments, setGroupAssignments] = useState<AssignmentWithCompletion[]>([]);
   const [isLoadingGroupAssignments, setIsLoadingGroupAssignments] = useState(true);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export const useGroupAssignments = (groupId?: number) => {
     async (essayId: number, dueDate: Date, instructions?: string) => {
       if (!groupId) return;
       const newAss = await createNewAssignment(groupId, essayId, dueDate, instructions);
-      setGroupAssignments((prev) => [...prev, newAss]);
+      setGroupAssignments((prev) => [...prev, { ...newAss, completedPercentage: 0 }]);
     },
     [groupId],
   );

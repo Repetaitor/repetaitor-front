@@ -11,6 +11,10 @@ export type Assignment = {
   dueDate: Date;
 };
 
+export type AssignmentWithCompletion = Assignment & {
+  completedPercentage: number;
+};
+
 export enum AssignmentStatus {
   Complete = 'Complete',
   InProgress = 'In Progress',
