@@ -4,16 +4,20 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar.tsx';
 import { getFullName } from '@/lib/users.utils';
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { useGroupsContext } from '@/store';
+import { useAuthContext, useGroupsContext } from '@/store';
 import { useToast } from '@/hooks';
 import { useCallback, useState } from 'react';
+import { LogOut } from 'lucide-react';
+import { removeStudentFromGroup } from '@/lib/serverCalls';
 
 const StudentGroupInformation = () => {
   const { studentGroup, joinGroup } = useGroupsContext();
+  const { activeUser } = useAuthContext();
   const { toast } = useToast();
 
   const [groupCode, setGroupCode] = useState('');
   const [isJoining, setIsJoining] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
 
   const handleJoinGroup = useCallback(async () => {
     if (!groupCode.trim()) {
@@ -46,11 +50,40 @@ const StudentGroupInformation = () => {
     }
   }, [groupCode, joinGroup, toast]);
 
+  const handleLeaveGroup = useCallback(async () => {
+    if (!studentGroup || !activeUser) return;
+    setIsLeaving(true);
+    try {
+      await removeStudentFromGroup(studentGroup.id, activeUser.id);
+      window.location.reload();
+      toast({
+        title: 'წარმატებით გამოხვედი ჯგუფიდან',
+      });
+    } catch (error) {
+      console.error('Error leaving group:', error);
+      toast({
+        title: 'მოხდა შეცდომა',
+        description: 'ვერ მოხერხდა ჯგუფიდან გამოსვლა. გთხოვთ, სცადოთ კიდევ ერთხელ.',
+        variant: 'danger',
+      });
+    } finally {
+      setIsLeaving(false);
+    }
+  }, [studentGroup, activeUser, toast, setIsLeaving]);
+
   if (studentGroup)
     return (
       <Card className="border-muted/30">
         <CardHeader>
-          <CardTitle>შენი ჯგუფი</CardTitle>
+          <CardTitle>
+            <div className="flex w-full items-center justify-between gap-2">
+              შენი ჯგუფი
+              <Button variant="danger" size="sm" onClick={handleLeaveGroup} className="gap-2" disabled={isLeaving}>
+                <LogOut className="h-4 w-4" />
+                {isLeaving ? 'მიმდინარეობს გამოსვლა...' : 'ჯგუფიდან გამოსვლა'}
+              </Button>
+            </div>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
