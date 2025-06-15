@@ -50,7 +50,7 @@ const AddNewEssay = ({
     defaultValues: {
       essayTitle: editingEssay?.essayTitle || '',
       essayDescription: editingEssay?.essayDescription || '',
-      expectedWordCount: editingEssay?.expectedWordCount || 500,
+      expectedWordCount: editingEssay?.expectedWordCount || 150,
     },
   });
 
@@ -65,7 +65,7 @@ const AddNewEssay = ({
       form.reset({
         essayTitle: '',
         essayDescription: '',
-        expectedWordCount: 500,
+        expectedWordCount: 150,
       });
     }
   }, [editingEssay, form]);
