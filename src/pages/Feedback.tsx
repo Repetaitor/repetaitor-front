@@ -244,7 +244,6 @@ const Feedback = () => {
                     </div>
 
                     <div className="space-y-3">
-                      <h3 className="text-sm font-medium">ლეგენდა</h3>
                       <div className="flex items-center">
                         <span className="mr-2 h-3 w-3 rounded-full bg-green-500"></span>
                         <span className="text-sm">მშვენიერია</span>
