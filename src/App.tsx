@@ -18,6 +18,7 @@ import Feedback from '@/pages/Feedback.tsx';
 import AssignmentDetail from '@/pages/AssignmentDetail.tsx';
 import StudentDashboard from './pages/StudentDashboard';
 import PublicSubmissions from './pages/PublicSubmissions';
+import Chat from './pages/Chat';
 
 const App = () => {
   return (
@@ -40,7 +41,7 @@ const App = () => {
       <Route path={`${NavigationRoute.FEEDBACK}/:assignmentId/:userId`} element={<Feedback />} />
       <Route path={`${NavigationRoute.PUBLIC_SUBMISSIONS}/:assignmentId`} element={<PublicSubmissions />} />
       <Route path={`${NavigationRoute.STUDENT_DASHBOARD}/:userId`} element={<StudentDashboard />} />
-
+      <Route path={NavigationRoute.CHAT} element={<Chat />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

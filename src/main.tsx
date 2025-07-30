@@ -4,6 +4,7 @@ import App from './App.tsx';
 import Toaster from './components/toast/toaster.tsx';
 import { AuthContextProvider, EssaysProvider, GroupsProvider } from '@/store';
 import { BrowserRouter } from 'react-router-dom';
+import ChatBaseView from './components/chat/chatView.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')!).render(
         <EssaysProvider>
           <Toaster />
           <App />
+          <ChatBaseView />
         </EssaysProvider>
       </GroupsProvider>
     </AuthContextProvider>

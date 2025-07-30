@@ -22,4 +22,5 @@ export enum NavigationRoute {
   EVALUATE = '/evaluate',
   STUDENT_DASHBOARD = '/student-dashboard',
   PUBLIC_SUBMISSIONS = '/public-submissions',
+  CHAT = '/chat',
 }

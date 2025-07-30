@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { BookOpen, ClipboardCheck, BrainCircuit, FileText, LayoutDashboard, Users } from 'lucide-react';
+import { BookOpen, ClipboardCheck, BrainCircuit, FileText, LayoutDashboard, Users, MessageCircle } from 'lucide-react';
 import { NavigationItem, NavigationRoute, UserRole } from '@/types';
 import { useAuthContext } from '@/store';
 import { useCallback, useMemo } from 'react';
@@ -19,6 +19,11 @@ const STUDENT_NAV_ITEMS: NavigationItem[] = [
     icon: BrainCircuit,
     label: 'AI დავალებები',
     href: NavigationRoute.AI_ASSIGNMENTS,
+  },
+  {
+    icon: MessageCircle,
+    label: 'ჩატები',
+    href: NavigationRoute.CHAT,
   },
 ];
 
@@ -42,6 +47,11 @@ const TEACHER_NAV_ITEMS: NavigationItem[] = [
     icon: ClipboardCheck,
     label: 'ნაშრომები',
     href: NavigationRoute.SUBMISSIONS,
+  },
+  {
+    icon: MessageCircle,
+    label: 'ჩატები',
+    href: NavigationRoute.CHAT,
   },
 ];
 

@@ -1,4 +1,4 @@
-export const SERVER_URL = 'https://repetaitor-h4e5hhgeafcufeab.germanywestcentral-01.azurewebsites.net/api';
+export const SERVER_URL = 'https://localhost:44317/api';
 
 export enum ServerRoutes {
   // User
@@ -39,4 +39,8 @@ export enum ServerRoutes {
   UPDATE_ESSAY = 'Essay/UpdateEssay',
   DELETE_ESSAY = 'Essay/DeleteEssay',
   GET_TEXT_FROM_IMAGES = 'Assignment/GetTextFromImage',
+
+  GET_USER_CHATS = 'Chat/GetUserChats',
+  GET_CHAT_MESSAGES = 'Chat/GetChatMessages',
+  SEND_MESSAGE = 'Chat/SendMessage',
 }
